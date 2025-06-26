@@ -25,4 +25,9 @@ public class BlogController {
     public BlogDTO createBlog(@RequestBody BlogDTO blogDTO){
         return blogService.createBlog(blogDTO);
     }
+
+    @DeleteMapping(path = "/{id}")
+    public String deleteBlog(@PathVariable Long id){
+        return blogService.deleteBlog(id);
+    }
 }

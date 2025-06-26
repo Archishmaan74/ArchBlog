@@ -28,4 +28,11 @@ public class BlogService {
         BlogEntity blogEntity = modelMapper.map(blogDTO, BlogEntity.class);
         return modelMapper.map(blogRepository.save(blogEntity), BlogDTO.class);
     }
+
+    public String deleteBlog(Long id) {
+        boolean isPresent = blogRepository.existsById(id);
+        if(!isPresent) return "Oops! Blog details not present!";
+        blogRepository.deleteById(id);
+        return "Blog details deleted!";
+    }
 }
