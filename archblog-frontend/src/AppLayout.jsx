@@ -1,15 +1,25 @@
 import { Outlet } from "react-router-dom";
 import NavHeader from "./components/NavHeader";
 import NavFooter from "./components/NavFooter";
+import { CssBaseline, Container, Box } from "@mui/material";
 
-function AppLayout() {
+const AppLayout = () => {
   return (
     <>
-      <NavHeader />
-      <Outlet />
-      <NavFooter />
+      <CssBaseline />
+      <Box display="flex" flexDirection="column" minHeight="100vh">
+        <NavHeader />
+
+        <Box component="main" flexGrow={1}>
+          <Container maxWidth="lg" sx={{ py: 4 }}>
+            <Outlet />
+          </Container>
+        </Box>
+
+        <NavFooter />
+      </Box>
     </>
   );
-}
+};
 
 export default AppLayout;
