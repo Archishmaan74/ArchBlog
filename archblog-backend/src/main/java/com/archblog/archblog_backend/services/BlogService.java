@@ -25,8 +25,13 @@ public class BlogService {
     }
 
     public BlogDTO createBlog(BlogDTO blogDTO) {
-        BlogEntity blogEntity = modelMapper.map(blogDTO, BlogEntity.class);
-        return modelMapper.map(blogRepository.save(blogEntity), BlogDTO.class);
+        int count = (int) blogRepository.count();
+        if(count < 6){
+            BlogEntity blogEntity = modelMapper.map(blogDTO, BlogEntity.class);
+            return modelMapper.map(blogRepository.save(blogEntity), BlogDTO.class);
+        } else {
+            throw new RuntimeException("Cannot create more than 2 blogs pls!");
+        }
     }
 
     public String deleteBlog(Long id) {
@@ -40,7 +45,8 @@ public class BlogService {
         BlogEntity existingBlogEntity = blogRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Blog not found with id: " + id));
 
-        existingBlogEntity.setName(edittedBlogDTO.getName());
+        existingBlogEntity.setFirstName(edittedBlogDTO.getFirstName());
+        existingBlogEntity.setLastName(edittedBlogDTO.getLastName());
         existingBlogEntity.setBlogTitle(edittedBlogDTO.getTitle());
         existingBlogEntity.setBlogContent(edittedBlogDTO.getContent());
         existingBlogEntity.setDateOfBlog(edittedBlogDTO.getDateOfBlog());

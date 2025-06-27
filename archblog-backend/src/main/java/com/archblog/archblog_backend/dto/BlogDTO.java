@@ -12,7 +12,8 @@ import java.time.LocalTime;
 @NoArgsConstructor
 public class BlogDTO{
     private Long id;
-    private String name;
+    private String firstName;
+    private String lastName;
     private String title;
     private String content;
     private LocalDate dateOfBlog;
