@@ -35,4 +35,20 @@ public class BlogService {
         blogRepository.deleteById(id);
         return "Blog details deleted!";
     }
+
+    public BlogDTO editBlog(BlogDTO edittedBlogDTO, Long id) {
+        BlogEntity existingBlogEntity = blogRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Blog not found with id: " + id));
+
+        existingBlogEntity.setName(edittedBlogDTO.getName());
+        existingBlogEntity.setBlogTitle(edittedBlogDTO.getTitle());
+        existingBlogEntity.setBlogContent(edittedBlogDTO.getContent());
+        existingBlogEntity.setDateOfBlog(edittedBlogDTO.getDateOfBlog());
+        existingBlogEntity.setTimeOfBlog(edittedBlogDTO.getTimeOfBlog());
+        existingBlogEntity.setGender(edittedBlogDTO.getGender());
+        existingBlogEntity.setCompanyName(edittedBlogDTO.getCompanyName());
+
+        BlogEntity edittedBlogEntity = blogRepository.save(existingBlogEntity);
+        return modelMapper.map(edittedBlogEntity, BlogDTO.class);
+    }
 }

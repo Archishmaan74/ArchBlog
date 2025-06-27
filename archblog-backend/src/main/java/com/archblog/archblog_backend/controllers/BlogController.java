@@ -30,4 +30,9 @@ public class BlogController {
     public String deleteBlog(@PathVariable Long id){
         return blogService.deleteBlog(id);
     }
+
+    @PutMapping(path = "/{id}")
+    public BlogDTO editBlog(@RequestBody BlogDTO edittedBlogDTO, @PathVariable Long id){
+        return blogService.editBlog(edittedBlogDTO, id);
+    }
 }
