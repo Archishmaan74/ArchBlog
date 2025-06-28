@@ -21,7 +21,10 @@ public class BlogService {
     }
 
     public List<BlogDTO> getAllBogs() {
-        return blogRepository.findAll().stream().map(blogEntity -> modelMapper.map(blogEntity, BlogDTO.class)).collect(Collectors.toList());
+        return blogRepository.findAllByOrderByDateOfBlogDescTimeOfBlogDesc()
+                .stream()
+                .map(blogEntity -> modelMapper.map(blogEntity, BlogDTO.class))
+                .collect(Collectors.toList());
     }
 
     public BlogDTO createBlog(BlogDTO blogDTO) {
