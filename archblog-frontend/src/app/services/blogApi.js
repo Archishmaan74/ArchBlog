@@ -7,7 +7,6 @@ export const blogApi = createApi({
     getBlogs: builder.query({
       query: () => "/blogs",
     }),
-    // You’ll add addBlog, updateBlog, deleteBlog later
   }),
 });
 
