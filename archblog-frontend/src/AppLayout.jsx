@@ -1,21 +1,23 @@
 import { Outlet } from "react-router-dom";
 import NavHeader from "./components/NavHeader/NavHeader";
 import NavFooter from "./components/NavFooter/NavFooter";
-import { Container, Box } from "@mui/material";
+import { StyledAppLayout, Header, Main, Footer } from "./AppLayoutStyles";
 
 const AppLayout = () => {
   return (
-    <>
-      <Box display="flex" flexDirection="column" minHeight="100vh">
+    <StyledAppLayout>
+      <Header>
         <NavHeader />
-        <Box component="main" flexGrow={1}>
-          <Container maxWidth="lg" sx={{ py: 4 }}>
-            <Outlet />
-          </Container>
-        </Box>
+      </Header>
+
+      <Main>
+        <Outlet />
+      </Main>
+
+      <Footer>
         <NavFooter />
-      </Box>
-    </>
+      </Footer>
+    </StyledAppLayout>
   );
 };
 

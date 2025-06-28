@@ -1,62 +1,68 @@
 import { useGetBlogsQuery } from "../../app/services/blogApi";
-import { CircularProgress, Box, Typography } from "@mui/material";
+import { CircularProgress, Typography } from "@mui/material";
+import StyledHome from "./HomeStyles";
 
 const Home = () => {
   const { data: blogs, error, isLoading } = useGetBlogsQuery();
 
   if (isLoading) {
     return (
-      <Box
-        sx={{
-          minHeight: "100vh",
-          display: "flex",
-          justifyContent: "center",
-          alignItems: "center",
-        }}
-      >
-        <CircularProgress color="warning" />
-      </Box>
+      <StyledHome>
+        <div
+          style={{
+            minHeight: "100vh",
+            display: "flex",
+            justifyContent: "center",
+            alignItems: "center",
+          }}
+        >
+          <CircularProgress color="warning" />
+        </div>
+      </StyledHome>
     );
   }
 
   if (error) {
     return (
-      <Typography color="error">
-        Failed to load blogs. Please try again.
-      </Typography>
+      <StyledHome>
+        <Typography color="error">
+          Failed to load blogs. Please try again.
+        </Typography>
+      </StyledHome>
     );
   }
 
   return (
-    <Box sx={{ padding: 4, color: "#fff" }}>
-      <Typography variant="h4" gutterBottom>
-        All Blogs
-      </Typography>
+    <StyledHome>
+      <Typography className="home-title">All Blogs</Typography>
 
       {blogs?.length > 0 ? (
-        blogs.map((blog) => (
-          <Box
-            key={blog.id}
-            sx={{ mb: 3, p: 2, backgroundColor: "#1f1f1f", borderRadius: 2 }}
-          >
-            <Typography variant="h6" color="orange">
-              {blog.title}
-            </Typography>
-            <Typography variant="body2" color="gray">
-              {blog.genre}
-            </Typography>
-            <Typography variant="body1" mt={1}>
-              {blog.content}
-            </Typography>
-            <Typography variant="caption" display="block" mt={1} color="gray">
-              {blog.dateOfBlog} - {blog.timeOfBlog}
-            </Typography>
-          </Box>
-        ))
+        blogs.map(
+          ({
+            id,
+            firstName,
+            lastName,
+            title,
+            content,
+            timeOfBlog,
+            dateOfBlog,
+          }) => (
+            <div className="blog-card" key={id}>
+              <Typography className="blog-title">{title}</Typography>
+              <Typography className="blog-content">{content}</Typography>
+              <Typography className="blog-date">
+                {firstName} {lastName}
+              </Typography>
+              <Typography className="blog-date">
+                {dateOfBlog} - {timeOfBlog}
+              </Typography>
+            </div>
+          )
+        )
       ) : (
         <Typography>No blogs found.</Typography>
       )}
-    </Box>
+    </StyledHome>
   );
 };
 
