@@ -7,7 +7,23 @@ export const blogApi = createApi({
     getBlogs: builder.query({
       query: () => "/blogs",
     }),
+
+    addBlog: builder.mutation({
+      query: (blogData) => ({
+        url: "/blogs",
+        method: "POST",
+        body: blogData,
+        headers: {
+          "Content-Type": "application/json",
+        },
+      }),
+    }),
+
+    getLoggedInUser: builder.query({
+      query: () => "/user",
+    }),
   }),
 });
 
-export const { useGetBlogsQuery } = blogApi;
+export const { useGetBlogsQuery, useAddBlogMutation, useGetLoggedInUserQuery } =
+  blogApi;

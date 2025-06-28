@@ -1,6 +1,10 @@
 import { AppBar, Toolbar, Typography, Button, Box } from "@mui/material";
 import { Link } from "react-router-dom";
 import StyledNavHeader from "./NavHeaderStyles";
+import CreateIcon from "@mui/icons-material/Create";
+import PersonIcon from "@mui/icons-material/Person";
+import ArticleIcon from "@mui/icons-material/Article";
+import HomeIcon from "@mui/icons-material/Home";
 
 const NavHeader = () => {
   return (
@@ -21,13 +25,16 @@ const NavHeader = () => {
 
           <Box className="nav-links">
             <Button component={Link} to="/home" className="nav-button">
-              Home
+              <HomeIcon />
             </Button>
-            <Button component={Link} to="/blogs" className="nav-button">
-              Blogs
+            <Button component={Link} to="/write" className="nav-button">
+              <CreateIcon />
             </Button>
-            <Button component={Link} to="/login" className="nav-button">
-              Logout
+            <Button component={Link} to="/yourblogs" className="nav-button">
+              <ArticleIcon />
+            </Button>
+            <Button component={Link} to="/user" className="nav-button">
+              <PersonIcon />
             </Button>
           </Box>
         </Toolbar>
