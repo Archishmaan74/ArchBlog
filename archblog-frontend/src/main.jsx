@@ -1,4 +1,4 @@
-import { StrictMode } from "react";
+import { StrictMode, lazy, Suspense } from "react";
 import { createRoot } from "react-dom/client";
 import {
   createBrowserRouter,
@@ -6,13 +6,18 @@ import {
   Route,
   RouterProvider,
 } from "react-router";
+import { CssBaseline } from "@mui/material";
+
 import AppLayout from "./AppLayout";
 import AuthLayout from "./AuthLayout";
-import Login from "./pages/Login/Login";
-import SignUp from "./pages/SignUp/SignUp";
-import Home from "./pages/Home/Home";
-import { CssBaseline } from "@mui/material";
-import ForgotPassword from "./pages/ForgotPassword/ForgotPassword";
+import Loader from "./components/Loader/Loader";
+
+const Login = lazy(() => import("./pages/Login/Login"));
+const SignUp = lazy(() => import("./pages/SignUp/SignUp"));
+const ForgotPassword = lazy(() =>
+  import("./pages/ForgotPassword/ForgotPassword")
+);
+const Home = lazy(() => import("./pages/Home/Home"));
 
 const router = createBrowserRouter(
   createRoutesFromElements(
@@ -34,6 +39,8 @@ const router = createBrowserRouter(
 createRoot(document.getElementById("root")).render(
   <StrictMode>
     <CssBaseline />
-    <RouterProvider router={router} />
+    <Suspense fallback={<Loader />}>
+      <RouterProvider router={router} />
+    </Suspense>
   </StrictMode>
 );
