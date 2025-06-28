@@ -8,9 +8,9 @@ import {
 } from "react-router";
 import AppLayout from "./AppLayout";
 import AuthLayout from "./AuthLayout";
-import Login from "./pages/Login";
-import SignUp from "./pages/SignUp";
-import Home from "./pages/Home";
+import Login from "./pages/Login/Login";
+import SignUp from "./pages/SignUp/SignUp";
+import Home from "./pages/Home/Home";
 
 const router = createBrowserRouter(
   createRoutesFromElements(

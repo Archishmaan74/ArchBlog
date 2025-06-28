@@ -1,6 +1,6 @@
 import { Outlet } from "react-router-dom";
-import NavHeader from "./components/NavHeader";
-import NavFooter from "./components/NavFooter";
+import NavHeader from "./components/NavHeader/NavHeader";
+import NavFooter from "./components/NavFooter/NavFooter";
 import { CssBaseline, Container, Box } from "@mui/material";
 
 const AppLayout = () => {
