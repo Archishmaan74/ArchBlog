@@ -11,6 +11,8 @@ import AuthLayout from "./AuthLayout";
 import Login from "./pages/Login/Login";
 import SignUp from "./pages/SignUp/SignUp";
 import Home from "./pages/Home/Home";
+import { CssBaseline } from "@mui/material";
+import ForgotPassword from "./pages/ForgotPassword/ForgotPassword";
 
 const router = createBrowserRouter(
   createRoutesFromElements(
@@ -19,6 +21,7 @@ const router = createBrowserRouter(
         <Route path="/" element={<Login />} />
         <Route path="/login" element={<Login />} />
         <Route path="/signup" element={<SignUp />} />
+        <Route path="/forgotpassword" element={<ForgotPassword />} />
       </Route>
 
       <Route element={<AppLayout />}>
@@ -30,6 +33,7 @@ const router = createBrowserRouter(
 
 createRoot(document.getElementById("root")).render(
   <StrictMode>
+    <CssBaseline />
     <RouterProvider router={router} />
   </StrictMode>
 );
