@@ -7,6 +7,8 @@ import {
   RouterProvider,
 } from "react-router";
 import { CssBaseline } from "@mui/material";
+import { Provider } from "react-redux";
+import store from "./app/store";
 
 import AppLayout from "./AppLayout";
 import AuthLayout from "./AuthLayout";
@@ -38,9 +40,11 @@ const router = createBrowserRouter(
 
 createRoot(document.getElementById("root")).render(
   <StrictMode>
-    <CssBaseline />
-    <Suspense fallback={<Loader />}>
-      <RouterProvider router={router} />
-    </Suspense>
+    <Provider store={store}>
+      <CssBaseline />
+      <Suspense fallback={<Loader />}>
+        <RouterProvider router={router} />
+      </Suspense>
+    </Provider>
   </StrictMode>
 );
