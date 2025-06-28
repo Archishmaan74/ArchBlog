@@ -22,8 +22,23 @@ export const blogApi = createApi({
     getLoggedInUser: builder.query({
       query: () => "/user",
     }),
+
+    updateUser: builder.mutation({
+      query: (userData) => ({
+        url: "/user",
+        method: "PUT",
+        body: userData,
+        headers: {
+          "Content-Type": "application/json",
+        },
+      }),
+    }),
   }),
 });
 
-export const { useGetBlogsQuery, useAddBlogMutation, useGetLoggedInUserQuery } =
-  blogApi;
+export const {
+  useGetBlogsQuery,
+  useAddBlogMutation,
+  useGetLoggedInUserQuery,
+  useUpdateUserMutation,
+} = blogApi;
