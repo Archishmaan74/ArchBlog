@@ -36,7 +36,16 @@ const Login = () => {
     <StyledLogin>
       <Paper className="login-paper" elevation={10}>
         <form onSubmit={handleSubmit}>
-          <Typography className="login-title">Welcome to ArchBlog!</Typography>
+          <div className="login-header">
+            <img
+              className="img-icon"
+              src="/archblog_icon.png"
+              alt="ArchBlog Logo"
+            />
+            <Typography className="login-title">
+              Welcome to ArchBlog!
+            </Typography>
+          </div>
 
           <TextField
             label="Email"

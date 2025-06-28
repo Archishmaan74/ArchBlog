@@ -18,12 +18,25 @@ const StyledLogin = styled("div")(({ theme }) => ({
     boxShadow: "0 8px 24px rgba(0,0,0,0.4)",
   },
 
+  "& .login-header": {
+    display: "flex",
+    flexDirection: "column",
+    alignItems: "center",
+  },
+
   "& .login-title": {
     fontWeight: 600,
     fontSize: "1.8rem",
     marginBottom: theme.spacing(3),
     color: "#FF6D00",
     textAlign: "center",
+  },
+
+  "& .img-icon": {
+    height: 48,
+    width: 48,
+    objectFit: "contain",
+    marginBottom: theme.spacing(1),
   },
 
   "& .login-textfield": {
