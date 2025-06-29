@@ -60,4 +60,13 @@ public class BlogService {
         BlogEntity edittedBlogEntity = blogRepository.save(existingBlogEntity);
         return modelMapper.map(edittedBlogEntity, BlogDTO.class);
     }
+
+    public List<BlogDTO> getBlogsByEmail(String email) {
+        List<BlogEntity> blogs = blogRepository.findByUserEmail(email);
+
+        return blogs.stream()
+                .map(blog -> modelMapper.map(blog, BlogDTO.class))
+                .collect(Collectors.toList());
+    }
+
 }

@@ -1,5 +1,6 @@
 package com.archblog.archblog_backend.controllers;
 
+import com.archblog.archblog_backend.configuration.JwtUtil;
 import com.archblog.archblog_backend.dto.BlogDTO;
 import com.archblog.archblog_backend.services.BlogService;
 import org.springframework.web.bind.annotation.*;
@@ -11,15 +12,25 @@ import java.util.List;
 public class BlogController {
 
     private final BlogService blogService;
+    private final JwtUtil jwtUtil;
 
-    private BlogController(BlogService blogService){
+    private BlogController(BlogService blogService, JwtUtil jwtUtil){
         this.blogService = blogService;
+        this.jwtUtil = jwtUtil;
     }
 
     @GetMapping
     public List<BlogDTO> getAllBlogs(){
         return blogService.getAllBogs();
     }
+
+    @GetMapping("/myblogs")
+    public List<BlogDTO> getMyBlogs(@RequestHeader("Authorization") String token) {
+        String jwt = token.substring(7);
+        String email = jwtUtil.extractUsername(jwt);
+        return blogService.getBlogsByEmail(email);
+    }
+
 
     @PostMapping
     public BlogDTO createBlog(@RequestBody BlogDTO blogDTO){

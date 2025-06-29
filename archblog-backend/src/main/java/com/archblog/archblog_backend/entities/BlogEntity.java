@@ -21,6 +21,9 @@ public class BlogEntity {
     private String lastName;
     private String blogTitle;
 
+    @Column(name = "user_email", nullable = true)
+    private String userEmail;
+
     @Lob
     private String blogContent;
 
