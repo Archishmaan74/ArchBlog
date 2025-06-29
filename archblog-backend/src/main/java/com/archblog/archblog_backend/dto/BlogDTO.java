@@ -16,6 +16,7 @@ public class BlogDTO{
     private String lastName;
     private String title;
     private String content;
+    public String userEmail;
     private LocalDate dateOfBlog;
     private LocalTime timeOfBlog;
     private String gender;

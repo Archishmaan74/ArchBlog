@@ -33,7 +33,11 @@ public class BlogController {
 
 
     @PostMapping
-    public BlogDTO createBlog(@RequestBody BlogDTO blogDTO){
+    public BlogDTO createBlog(@RequestBody BlogDTO blogDTO,
+                              @RequestHeader("Authorization") String token) {
+        String jwt = token.substring(7);
+        String email = jwtUtil.extractUsername(jwt);
+        blogDTO.setUserEmail(email);
         return blogService.createBlog(blogDTO);
     }
 

@@ -6,6 +6,8 @@ import com.archblog.archblog_backend.repositories.BlogRepository;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
+import java.time.LocalTime;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -29,11 +31,14 @@ public class BlogService {
 
     public BlogDTO createBlog(BlogDTO blogDTO) {
         int count = (int) blogRepository.count();
-        if(count < 6){
+
+        if (count < 6) {
             BlogEntity blogEntity = modelMapper.map(blogDTO, BlogEntity.class);
+            blogEntity.setDateOfBlog(LocalDate.now());
+            blogEntity.setTimeOfBlog(LocalTime.now());
             return modelMapper.map(blogRepository.save(blogEntity), BlogDTO.class);
         } else {
-            throw new RuntimeException("Cannot create more than 2 blogs pls!");
+            throw new RuntimeException("Cannot create more than 6 blogs!");
         }
     }
 
