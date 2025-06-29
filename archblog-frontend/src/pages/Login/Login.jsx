@@ -28,20 +28,23 @@ const Login = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-
     if (!validateForm()) return;
 
     try {
-      const { data } = await loginUser(formData);
-      if (data?.token) {
-        localStorage.setItem("token", data.token);
-        localStorage.setItem("user", JSON.stringify(data.user));
-        navigate("/home");
+      const result = await loginUser(formData).unwrap();
+      const { token, user } = result;
+
+      if (token) {
+        localStorage.setItem("token", token);
+        localStorage.setItem("user", JSON.stringify(user));
+
+        navigate("/home", { replace: true });
       } else {
         alert("Invalid credentials.");
       }
-    } catch (error) {
-      alert("Login failed. Please try again.");
+    } catch (err) {
+      console.error("Login error:", err);
+      alert("Login failed. Please check your credentials.");
     }
   };
 
