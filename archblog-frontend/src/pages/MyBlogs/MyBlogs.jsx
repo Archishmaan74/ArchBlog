@@ -2,6 +2,7 @@ import { useGetMyBlogsQuery } from "../../app/services/blogApi";
 import { Typography } from "@mui/material";
 import StyledMyBlogs from "./MyBlogsStyles";
 import Loader from "../../components/Loader/Loader";
+import { formatDateTime } from "../../utils/helper";
 
 const MyBlogs = () => {
   const { data: blogs, error, isLoading } = useGetMyBlogsQuery();
@@ -32,18 +33,22 @@ const MyBlogs = () => {
             content,
             timeOfBlog,
             dateOfBlog,
-          }) => (
-            <div className="blog-card" key={id}>
-              <Typography className="blog-title">{title}</Typography>
-              <Typography className="blog-content">{content}</Typography>
-              <Typography className="blog-date">
-                {firstName} {lastName}
-              </Typography>
-              <Typography className="blog-date">
-                {dateOfBlog} - {timeOfBlog}
-              </Typography>
-            </div>
-          )
+          }) => {
+            const { dateStr, timeStr } = formatDateTime(dateOfBlog, timeOfBlog);
+
+            return (
+              <div className="blog-card" key={id}>
+                <Typography className="blog-title">{title}</Typography>
+                <Typography className="blog-content">{content}</Typography>
+                <Typography className="blog-date">
+                  {firstName} {lastName}
+                </Typography>
+                <Typography className="blog-date">
+                  {dateStr} - {timeStr}
+                </Typography>
+              </div>
+            );
+          }
         )
       ) : (
         <Typography>No blogs posted by you yet.</Typography>
