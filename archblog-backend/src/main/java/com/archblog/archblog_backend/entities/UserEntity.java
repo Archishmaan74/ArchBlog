@@ -26,7 +26,6 @@ public class UserEntity implements UserDetails {
     private String gender;
     private String companyName;
 
-    // 👉 Required methods for Spring Security
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {

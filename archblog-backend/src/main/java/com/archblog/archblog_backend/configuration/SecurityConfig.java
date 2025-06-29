@@ -26,20 +26,17 @@ public class SecurityConfig {
         this.userRepository = userRepository;
     }
 
-    // 👉 Password encoder bean
     @Bean
     public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
     }
 
-    // 👉 UserDetailsService to tell Spring how to load users
     @Bean
     public UserDetailsService userDetailsService() {
         return email -> userRepository.findByEmail(email)
                 .orElseThrow(() -> new RuntimeException("User not found"));
     }
 
-    // 👉 Authentication manager (needed for login)
     @Bean
     public AuthenticationManager authenticationManager(UserDetailsService userDetailsService) {
         DaoAuthenticationProvider provider = new DaoAuthenticationProvider();
@@ -48,7 +45,6 @@ public class SecurityConfig {
         return new ProviderManager(provider);
     }
 
-    // 👉 Main security filter chain
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         return http

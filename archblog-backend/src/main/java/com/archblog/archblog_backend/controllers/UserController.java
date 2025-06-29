@@ -18,7 +18,6 @@ public class UserController {
         this.userService = userService;
     }
 
-    // ✅ Register new user (frontend sends password separately)
     @PostMapping("/register")
     public ResponseEntity<UserDTO> registerUser(@RequestBody UserDTO userDTO,
                                                 @RequestParam String password) {
@@ -26,14 +25,12 @@ public class UserController {
         return ResponseEntity.ok(registeredUser);
     }
 
-    // ✅ Login and get JWT + user details
     @PostMapping("/login")
     public ResponseEntity<JwtResponse> loginUser(@RequestBody LoginDTO loginDTO) {
         JwtResponse jwtResponse = userService.login(loginDTO);
         return ResponseEntity.ok(jwtResponse);
     }
 
-    // ✅ Get profile of logged-in user
     @GetMapping("/profile")
     public ResponseEntity<UserDTO> getLoggedInUser(Authentication authentication) {
         String email = authentication.getName(); // From token

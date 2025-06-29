@@ -37,7 +37,6 @@ public class JwtUtil {
         }
     }
 
-    // 👉 Helper: parses and validates the token
     private Jws<Claims> parseToken(String token) {
         return Jwts.parserBuilder()
                 .setSigningKey(key)

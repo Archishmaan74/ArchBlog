@@ -33,7 +33,6 @@ public class UserService {
         this.authenticationManager = authenticationManager;
     }
 
-    // ✅ Register new user
     public UserDTO register(UserDTO userDTO, String password) {
         UserEntity user = modelMapper.map(userDTO, UserEntity.class);
         user.setPassword(passwordEncoder.encode(password));
@@ -41,28 +40,22 @@ public class UserService {
         return modelMapper.map(savedUser, UserDTO.class);
     }
 
-    // ✅ Login: authenticate + return token + user
     public JwtResponse login(LoginDTO loginDTO) {
         // Authenticate with Spring Security
         authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(loginDTO.getEmail(), loginDTO.getPassword())
         );
 
-        // Fetch user from DB
         UserEntity user = userRepository.findByEmail(loginDTO.getEmail())
                 .orElseThrow(() -> new RuntimeException("User not found"));
 
-        // Generate token
         String token = jwtUtil.generateToken(user.getEmail());
 
-        // Map user entity to UserDTO
         UserDTO userDTO = modelMapper.map(user, UserDTO.class);
 
-        // Return token and user
         return new JwtResponse(token, userDTO);
     }
 
-    // ✅ Get logged-in user's profile
     public UserDTO getProfile(String email) {
         UserEntity user = userRepository.findByEmail(email)
                 .orElseThrow(() -> new RuntimeException("User not found"));
