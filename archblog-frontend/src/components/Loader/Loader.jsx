@@ -7,7 +7,6 @@ const Loader = () => (
       display: "flex",
       justifyContent: "center",
       alignItems: "center",
-      backgroundColor: "#151617",
     }}
   >
     <CircularProgress color="warning" />

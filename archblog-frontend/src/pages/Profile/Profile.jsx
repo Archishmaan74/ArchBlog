@@ -4,7 +4,8 @@ import {
   useUpdateUserMutation,
 } from "../../app/services/blogApi";
 import StyledProfile from "./ProfileStyles";
-import { TextField, Button, CircularProgress } from "@mui/material";
+import { TextField, Button } from "@mui/material";
+import Loader from "../../components/Loader/Loader";
 
 const Profile = () => {
   const { data: user, isLoading, error } = useGetLoggedInUserQuery();
@@ -45,11 +46,7 @@ const Profile = () => {
   };
 
   if (isLoading) {
-    return (
-      <StyledProfile>
-        <CircularProgress color="warning" />
-      </StyledProfile>
-    );
+    return <Loader />;
   }
 
   if (error) {

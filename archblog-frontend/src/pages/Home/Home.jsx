@@ -1,25 +1,13 @@
 import { useGetBlogsQuery } from "../../app/services/blogApi";
-import { CircularProgress, Typography } from "@mui/material";
+import { Typography } from "@mui/material";
 import StyledHome from "./HomeStyles";
+import Loader from "../../components/Loader/Loader";
 
 const Home = () => {
   const { data: blogs, error, isLoading } = useGetBlogsQuery();
 
   if (isLoading) {
-    return (
-      <StyledHome>
-        <div
-          style={{
-            minHeight: "100vh",
-            display: "flex",
-            justifyContent: "center",
-            alignItems: "center",
-          }}
-        >
-          <CircularProgress color="warning" />
-        </div>
-      </StyledHome>
-    );
+    return <Loader />;
   }
 
   if (error) {
