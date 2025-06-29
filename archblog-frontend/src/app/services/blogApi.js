@@ -18,7 +18,7 @@ export const blogApi = createApi({
     }),
 
     getMyBlogs: builder.query({
-      query: () => "/myblogs",
+      query: () => "/blogs/myblogs",
     }),
 
     addBlog: builder.mutation({
