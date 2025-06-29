@@ -1,0 +1,43 @@
+package com.archblog.archblog_backend.controllers;
+
+import com.archblog.archblog_backend.dto.JwtResponse;
+import com.archblog.archblog_backend.dto.LoginDTO;
+import com.archblog.archblog_backend.dto.UserDTO;
+import com.archblog.archblog_backend.services.UserService;
+import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
+import org.springframework.web.bind.annotation.*;
+
+@RestController
+@RequestMapping("/auth")
+public class UserController {
+
+    private final UserService userService;
+
+    public UserController(UserService userService) {
+        this.userService = userService;
+    }
+
+    // ✅ Register new user (frontend sends password separately)
+    @PostMapping("/register")
+    public ResponseEntity<UserDTO> registerUser(@RequestBody UserDTO userDTO,
+                                                @RequestParam String password) {
+        UserDTO registeredUser = userService.register(userDTO, password);
+        return ResponseEntity.ok(registeredUser);
+    }
+
+    // ✅ Login and get JWT + user details
+    @PostMapping("/login")
+    public ResponseEntity<JwtResponse> loginUser(@RequestBody LoginDTO loginDTO) {
+        JwtResponse jwtResponse = userService.login(loginDTO);
+        return ResponseEntity.ok(jwtResponse);
+    }
+
+    // ✅ Get profile of logged-in user
+    @GetMapping("/profile")
+    public ResponseEntity<UserDTO> getLoggedInUser(Authentication authentication) {
+        String email = authentication.getName(); // From token
+        UserDTO userDTO = userService.getProfile(email);
+        return ResponseEntity.ok(userDTO);
+    }
+}
