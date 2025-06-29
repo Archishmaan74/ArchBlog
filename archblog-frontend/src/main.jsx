@@ -21,6 +21,7 @@ const ForgotPassword = lazy(() =>
 );
 const Home = lazy(() => import("./pages/Home/Home"));
 const AddBlog = lazy(() => import("./pages/AddBlog/AddBlog"));
+const MyBlogs = lazy(() => import("./pages/MyBlogs/MyBlogs"));
 const Profile = lazy(() => import("./pages/Profile/Profile"));
 
 const router = createBrowserRouter(
@@ -36,6 +37,7 @@ const router = createBrowserRouter(
       <Route element={<AppLayout />}>
         <Route path="/home" element={<Home />} />
         <Route path="/write" element={<AddBlog />} />
+        <Route path="/myblogs" element={<MyBlogs />} />
         <Route path="/user" element={<Profile />} />
       </Route>
     </>

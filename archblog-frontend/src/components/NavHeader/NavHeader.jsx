@@ -30,7 +30,7 @@ const NavHeader = () => {
             <Button component={Link} to="/write" className="nav-button">
               <CreateIcon />
             </Button>
-            <Button component={Link} to="/yourblogs" className="nav-button">
+            <Button component={Link} to="/myblogs" className="nav-button">
               <ArticleIcon />
             </Button>
             <Button component={Link} to="/user" className="nav-button">
