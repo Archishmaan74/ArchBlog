@@ -3,11 +3,14 @@ import { Paper, Typography, TextField, Button } from "@mui/material";
 import GoogleIcon from "@mui/icons-material/Google";
 import StyledLogin from "./LoginStyles";
 import { Link, useNavigate } from "react-router-dom";
+import { useLoginUserMutation } from "../../app/services/authApi";
+import Loader from "../../components/Loader/Loader";
 
 const Login = () => {
   const [formData, setFormData] = useState({ email: "", password: "" });
   const [errors, setErrors] = useState({ email: false, password: false });
   const navigate = useNavigate();
+  const [loginUser, { isLoading }] = useLoginUserMutation();
 
   const handleChange = (e) => {
     setFormData((prev) => ({ ...prev, [e.target.name]: e.target.value }));
@@ -23,12 +26,22 @@ const Login = () => {
     return !newErrors.email && !newErrors.password;
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
 
-    if (validateForm()) {
-      console.log("Login submitted:", formData);
-      navigate("/home");
+    if (!validateForm()) return;
+
+    try {
+      const { data } = await loginUser(formData);
+      if (data?.token) {
+        localStorage.setItem("token", data.token);
+        localStorage.setItem("user", JSON.stringify(data.user));
+        navigate("/home");
+      } else {
+        alert("Invalid credentials.");
+      }
+    } catch (error) {
+      alert("Login failed. Please try again.");
     }
   };
 
@@ -79,9 +92,13 @@ const Login = () => {
             Forgot password?
           </Link>
 
-          <Button type="submit" variant="contained" className="login-button">
-            Login
-          </Button>
+          {isLoading ? (
+            <Loader />
+          ) : (
+            <Button type="submit" variant="contained" className="login-button">
+              Login
+            </Button>
+          )}
 
           <Button
             type="button"

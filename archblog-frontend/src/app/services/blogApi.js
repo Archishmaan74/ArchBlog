@@ -2,7 +2,16 @@ import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 
 export const blogApi = createApi({
   reducerPath: "blogApi",
-  baseQuery: fetchBaseQuery({ baseUrl: "http://localhost:8080" }),
+  baseQuery: fetchBaseQuery({
+    baseUrl: "http://localhost:8080",
+    prepareHeaders: (headers) => {
+      const token = localStorage.getItem("token");
+      if (token) {
+        headers.set("Authorization", `Bearer ${token}`);
+      }
+      return headers;
+    },
+  }),
   endpoints: (builder) => ({
     getBlogs: builder.query({
       query: () => "/blogs",
@@ -13,9 +22,6 @@ export const blogApi = createApi({
         url: "/blogs",
         method: "POST",
         body: blogData,
-        headers: {
-          "Content-Type": "application/json",
-        },
       }),
     }),
 
@@ -28,9 +34,6 @@ export const blogApi = createApi({
         url: "/user",
         method: "PUT",
         body: userData,
-        headers: {
-          "Content-Type": "application/json",
-        },
       }),
     }),
   }),
