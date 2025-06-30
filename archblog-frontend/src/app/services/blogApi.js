@@ -22,10 +22,10 @@ export const blogApi = createApi({
     }),
 
     addBlog: builder.mutation({
-      query: (blogData) => ({
+      query: ({ title, content }) => ({
         url: "/blogs",
         method: "POST",
-        body: blogData,
+        body: { title, content },
         headers: {
           "Content-Type": "application/json",
         },
