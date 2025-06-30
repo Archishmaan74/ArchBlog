@@ -16,6 +16,7 @@ const StyledNavHeader = styled("header")(({ theme }) => ({
     display: "flex",
     alignItems: "center",
     gap: theme.spacing(1),
+    textDecoration: "none",
   },
 
   "& .nav-logo-img": {

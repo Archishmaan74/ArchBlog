@@ -51,7 +51,7 @@ const NavHeader = () => {
     <StyledNavHeader>
       <AppBar position="static" elevation={0} className="nav-appbar">
         <Toolbar className="nav-toolbar">
-          <Box className="nav-logo-wrap">
+          <Box component={Link} to="/home" className="nav-logo-wrap">
             <Box
               component="img"
               src="/archblog_icon.png"
