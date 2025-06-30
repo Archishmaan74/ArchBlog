@@ -1,4 +1,18 @@
-import { AppBar, Toolbar, Typography, Button, Box } from "@mui/material";
+import { useState } from "react";
+import {
+  AppBar,
+  Toolbar,
+  Typography,
+  Button,
+  Box,
+  IconButton,
+  Drawer,
+  List,
+  ListItem,
+  ListItemIcon,
+  ListItemText,
+} from "@mui/material";
+import MenuIcon from "@mui/icons-material/Menu";
 import { Link } from "react-router-dom";
 import StyledNavHeader from "./NavHeaderStyles";
 import CreateIcon from "@mui/icons-material/Create";
@@ -7,6 +21,32 @@ import ArticleIcon from "@mui/icons-material/Article";
 import HomeIcon from "@mui/icons-material/Home";
 
 const NavHeader = () => {
+  const [mobileOpen, setMobileOpen] = useState(false);
+
+  const handleDrawerToggle = () => {
+    setMobileOpen((prev) => !prev);
+  };
+
+  const drawerItems = [
+    { label: "Home", icon: <HomeIcon />, to: "/home" },
+    { label: "Write", icon: <CreateIcon />, to: "/write" },
+    { label: "My Blogs", icon: <ArticleIcon />, to: "/myblogs" },
+    { label: "Profile", icon: <PersonIcon />, to: "/profile" },
+  ];
+
+  const drawer = (
+    <Box sx={{ width: 250 }} onClick={handleDrawerToggle}>
+      <List>
+        {drawerItems.map((item) => (
+          <ListItem button key={item.label} component={Link} to={item.to}>
+            <ListItemIcon>{item.icon}</ListItemIcon>
+            <ListItemText primary={item.label} />
+          </ListItem>
+        ))}
+      </List>
+    </Box>
+  );
+
   return (
     <StyledNavHeader>
       <AppBar position="static" elevation={0} className="nav-appbar">
@@ -24,21 +64,37 @@ const NavHeader = () => {
           </Box>
 
           <Box className="nav-links">
-            <Button component={Link} to="/home" className="nav-button">
-              <HomeIcon />
-            </Button>
-            <Button component={Link} to="/write" className="nav-button">
-              <CreateIcon />
-            </Button>
-            <Button component={Link} to="/myblogs" className="nav-button">
-              <ArticleIcon />
-            </Button>
-            <Button component={Link} to="/profile" className="nav-button">
-              <PersonIcon />
-            </Button>
+            {drawerItems.map((item) => (
+              <Button
+                key={item.label}
+                component={Link}
+                to={item.to}
+                className="nav-button"
+              >
+                {item.icon}
+              </Button>
+            ))}
           </Box>
+
+          <IconButton
+            edge="end"
+            className="nav-menu-icon"
+            color="inherit"
+            onClick={handleDrawerToggle}
+          >
+            <MenuIcon />
+          </IconButton>
         </Toolbar>
       </AppBar>
+
+      <Drawer
+        anchor="right"
+        open={mobileOpen}
+        onClose={handleDrawerToggle}
+        ModalProps={{ keepMounted: true }}
+      >
+        {drawer}
+      </Drawer>
     </StyledNavHeader>
   );
 };

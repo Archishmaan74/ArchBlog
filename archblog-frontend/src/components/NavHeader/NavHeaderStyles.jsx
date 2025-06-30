@@ -8,6 +8,7 @@ const StyledNavHeader = styled("header")(({ theme }) => ({
   "& .nav-toolbar": {
     display: "flex",
     justifyContent: "space-between",
+    alignItems: "center",
     padding: theme.spacing(1, 2),
   },
 
@@ -31,12 +32,24 @@ const StyledNavHeader = styled("header")(({ theme }) => ({
   "& .nav-links": {
     display: "flex",
     gap: theme.spacing(2),
+
+    [theme.breakpoints.down("sm")]: {
+      display: "none",
+    },
   },
 
   "& .nav-button": {
     color: theme.palette.common.white,
     textTransform: "none",
     fontWeight: theme.typography.fontWeightMedium,
+  },
+
+  "& .nav-menu-icon": {
+    display: "none",
+
+    [theme.breakpoints.down("sm")]: {
+      display: "block",
+    },
   },
 }));
 

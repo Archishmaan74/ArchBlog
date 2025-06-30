@@ -1,7 +1,10 @@
 import { styled } from "@mui/material/styles";
 
 const StyledHome = styled("div")(({ theme }) => ({
-  padding: theme.spacing(4),
+  padding: `${theme.spacing(4)} ${theme.spacing(20)}`,
+  [theme.breakpoints.down("md")]: {
+    padding: theme.spacing(4),
+  },
   color: "#fff",
 
   "& .home-title": {
