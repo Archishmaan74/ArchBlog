@@ -14,11 +14,11 @@ public class BlogDTO {
     private Long id;
     private String title;
     private String content;
-    private String userEmail;
     private LocalDate dateOfBlog;
     private LocalTime timeOfBlog;
+    private String userEmail;
 
-    // Populated only in response
+    // Response-only: Author info
     private String firstName;
     private String lastName;
     private String gender;

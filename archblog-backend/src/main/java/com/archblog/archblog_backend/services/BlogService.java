@@ -30,40 +30,30 @@ public class BlogService {
     public List<BlogDTO> getAllBogs() {
         return blogRepository.findAllByOrderByDateOfBlogDescTimeOfBlogDesc()
                 .stream()
-                .map(blogEntity -> modelMapper.map(blogEntity, BlogDTO.class))
+                .map(this::convertToDTO)
                 .collect(Collectors.toList());
     }
 
     public BlogDTO createBlog(BlogDTO blogDTO) {
         int count = (int) blogRepository.count();
 
-        if (count < 6) {
-            String email = blogDTO.getUserEmail();
-            UserEntity user = userRepository.findByEmail(email)
-                    .orElseThrow(() -> new UsernameNotFoundException("User not found"));
-
-            BlogEntity blogEntity = new BlogEntity();
-            blogEntity.setBlogTitle(blogDTO.getTitle());
-            blogEntity.setBlogContent(blogDTO.getContent());
-            blogEntity.setDateOfBlog(LocalDate.now());
-            blogEntity.setTimeOfBlog(LocalTime.now());
-            blogEntity.setUser(user);
-
-            BlogEntity saved = blogRepository.save(blogEntity);
-
-            BlogDTO response = new BlogDTO();
-            response.setId(saved.getId());
-            response.setTitle(saved.getBlogTitle());
-            response.setContent(saved.getBlogContent());
-            response.setUserEmail(user.getEmail());
-            response.setDateOfBlog(saved.getDateOfBlog());
-            response.setTimeOfBlog(saved.getTimeOfBlog());
-
-            return response;
-
-        } else {
+        if (count >= 6) {
             throw new RuntimeException("Cannot create more than 6 blogs!");
         }
+
+        String email = blogDTO.getUserEmail();
+        UserEntity user = userRepository.findByEmail(email)
+                .orElseThrow(() -> new UsernameNotFoundException("User not found"));
+
+        BlogEntity blogEntity = new BlogEntity();
+        blogEntity.setBlogTitle(blogDTO.getTitle());
+        blogEntity.setBlogContent(blogDTO.getContent());
+        blogEntity.setDateOfBlog(LocalDate.now());
+        blogEntity.setTimeOfBlog(LocalTime.now());
+        blogEntity.setUser(user);
+
+        BlogEntity saved = blogRepository.save(blogEntity);
+        return convertToDTO(saved);
     }
 
     public String deleteBlog(Long id) {
@@ -83,14 +73,33 @@ public class BlogService {
         existingBlogEntity.setTimeOfBlog(edittedBlogDTO.getTimeOfBlog());
 
         BlogEntity edittedBlogEntity = blogRepository.save(existingBlogEntity);
-        return modelMapper.map(edittedBlogEntity, BlogDTO.class);
+        return convertToDTO(edittedBlogEntity);
     }
 
     public List<BlogDTO> getBlogsByEmail(String email) {
         List<BlogEntity> blogs = blogRepository.findByUserEmail(email);
-
         return blogs.stream()
-                .map(blog -> modelMapper.map(blog, BlogDTO.class))
+                .map(this::convertToDTO)
                 .collect(Collectors.toList());
+    }
+
+    private BlogDTO convertToDTO(BlogEntity blog) {
+        BlogDTO dto = new BlogDTO();
+        dto.setId(blog.getId());
+        dto.setTitle(blog.getBlogTitle());
+        dto.setContent(blog.getBlogContent());
+        dto.setDateOfBlog(blog.getDateOfBlog());
+        dto.setTimeOfBlog(blog.getTimeOfBlog());
+
+        UserEntity user = blog.getUser();
+        if (user != null) {
+            dto.setUserEmail(user.getEmail());
+            dto.setFirstName(user.getFirstName());
+            dto.setLastName(user.getLastName());
+            dto.setGender(user.getGender());
+            dto.setCompanyName(user.getCompanyName());
+        }
+
+        return dto;
     }
 }
