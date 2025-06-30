@@ -1,21 +1,21 @@
 import { useState } from "react";
-import {
-  useGetLoggedInUserQuery,
-  useAddBlogMutation,
-} from "../../app/services/blogApi";
+import { useAddBlogMutation } from "../../app/services/blogApi";
 import StyledAddBlog from "./AddBlogStyles";
 import { TextField, Button } from "@mui/material";
-import { CircularProgress } from "@mui/material";
 import { Navigate } from "react-router-dom";
+import Loader from "../../components/Loader/Loader";
 
 const AddBlog = () => {
-  const { data: user, isLoading, error } = useGetLoggedInUserQuery();
   const [addBlog] = useAddBlogMutation();
 
   const [formData, setFormData] = useState({
     title: "",
     content: "",
   });
+
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [error, setError] = useState(null);
+  const [success, setSuccess] = useState(false);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -27,46 +27,23 @@ const AddBlog = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-
-    const now = new Date();
-
-    const blogData = {
-      firstName: user.firstName,
-      lastName: user.lastName,
-      gender: user.gender,
-      companyName: user.companyName,
-      title: formData.title,
-      content: formData.content,
-      dateOfBlog: now.toISOString().split("T")[0],
-      timeOfBlog: now.toTimeString().split(" ")[0],
-    };
+    setIsSubmitting(true);
+    setError(null);
 
     try {
-      await addBlog(blogData).unwrap();
-      alert("Blog added successfully!");
+      await addBlog(formData).unwrap();
+      setSuccess(true);
       setFormData({ title: "", content: "" });
     } catch (err) {
       console.error("Failed to add blog:", err);
-      alert("Something went wrong!");
+      setError("Something went wrong while adding the blog.");
+    } finally {
+      setIsSubmitting(false);
     }
   };
 
-  if (isLoading) {
-    return (
-      <StyledAddBlog>
-        <CircularProgress color="warning" />
-      </StyledAddBlog>
-    );
-  }
-
-  if (error?.status === 401) {
-    return <Navigate to="/login" />;
-  }
-
-  if (error) {
-    return <StyledAddBlog>Error loading user!</StyledAddBlog>;
-  }
-  console.log("✅ AddBlog.jsx mounted");
+  if (success) return <Navigate to="/home" />;
+  if (isSubmitting) return <Loader />;
 
   return (
     <StyledAddBlog>
@@ -97,9 +74,15 @@ const AddBlog = () => {
             onChange={handleChange}
             required
           />
-          <Button type="submit" variant="contained" className="submit-button">
+          <Button
+            type="submit"
+            variant="contained"
+            className="submit-button"
+            disabled={isSubmitting}
+          >
             Post Blog
           </Button>
+          {error && <p style={{ color: "red", marginTop: "1rem" }}>{error}</p>}
         </form>
       </div>
     </StyledAddBlog>

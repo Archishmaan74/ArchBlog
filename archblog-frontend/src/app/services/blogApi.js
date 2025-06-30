@@ -15,6 +15,7 @@ export const blogApi = createApi({
   endpoints: (builder) => ({
     getBlogs: builder.query({
       query: () => "/blogs",
+      providesTags: ["Blogs"],
     }),
 
     getMyBlogs: builder.query({
@@ -30,6 +31,7 @@ export const blogApi = createApi({
           "Content-Type": "application/json",
         },
       }),
+      invalidatesTags: ["Blogs"],
     }),
 
     getLoggedInUser: builder.query({
