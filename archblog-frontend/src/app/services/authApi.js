@@ -2,7 +2,17 @@ import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 
 export const authApi = createApi({
   reducerPath: "authApi",
-  baseQuery: fetchBaseQuery({ baseUrl: "http://localhost:8080" }),
+  baseQuery: fetchBaseQuery({
+    baseUrl: "http://localhost:8080",
+    prepareHeaders: (headers) => {
+      const token = localStorage.getItem("token");
+      if (token) {
+        headers.set("Authorization", `Bearer ${token}`);
+      }
+      return headers;
+    },
+  }),
+  tagTypes: ["User"],
   endpoints: (builder) => ({
     loginUser: builder.mutation({
       query: (credentials) => ({
@@ -11,7 +21,25 @@ export const authApi = createApi({
         body: credentials,
       }),
     }),
+
+    getLoggedInUser: builder.query({
+      query: () => "/auth/profile",
+      providesTags: ["User"],
+    }),
+
+    updateUser: builder.mutation({
+      query: (updatedUser) => ({
+        url: "/auth/profile",
+        method: "PUT",
+        body: updatedUser,
+      }),
+      invalidatesTags: ["User"],
+    }),
   }),
 });
 
-export const { useLoginUserMutation } = authApi;
+export const {
+  useLoginUserMutation,
+  useGetLoggedInUserQuery,
+  useUpdateUserMutation,
+} = authApi;

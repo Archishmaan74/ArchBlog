@@ -58,6 +58,18 @@ const StyledProfile = styled("div")(({ theme }) => ({
       backgroundColor: "#e65c00",
     },
   },
+
+  "& .logout-button": {
+    marginTop: theme.spacing(2),
+    width: "100%",
+    color: "#FF6D00",
+    borderColor: "#FF6D00",
+    fontWeight: "bold",
+    "&:hover": {
+      backgroundColor: "#2b2b2b",
+      borderColor: "#e65c00",
+    },
+  },
 }));
 
 export default StyledProfile;

@@ -33,28 +33,8 @@ export const blogApi = createApi({
       }),
       invalidatesTags: ["Blogs"],
     }),
-
-    getLoggedInUser: builder.query({
-      query: () => "/user",
-    }),
-
-    updateUser: builder.mutation({
-      query: (userData) => ({
-        url: "/user",
-        method: "PUT",
-        body: userData,
-        headers: {
-          "Content-Type": "application/json",
-        },
-      }),
-    }),
   }),
 });
 
-export const {
-  useGetBlogsQuery,
-  useAddBlogMutation,
-  useGetLoggedInUserQuery,
-  useUpdateUserMutation,
-  useGetMyBlogsQuery,
-} = blogApi;
+export const { useGetBlogsQuery, useAddBlogMutation, useGetMyBlogsQuery } =
+  blogApi;

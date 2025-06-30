@@ -1,13 +1,15 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import {
   useGetLoggedInUserQuery,
   useUpdateUserMutation,
-} from "../../app/services/blogApi";
+} from "../../app/services/authApi";
 import StyledProfile from "./ProfileStyles";
 import { TextField, Button } from "@mui/material";
 import Loader from "../../components/Loader/Loader";
+import { useNavigate } from "react-router-dom";
 
 const Profile = () => {
+  const navigate = useNavigate();
   const { data: user, isLoading, error } = useGetLoggedInUserQuery();
   const [updateUser] = useUpdateUserMutation();
 
@@ -18,14 +20,16 @@ const Profile = () => {
     companyName: "",
   });
 
-  if (user && !formData.firstName) {
-    setFormData({
-      firstName: user.firstName,
-      lastName: user.lastName,
-      gender: user.gender,
-      companyName: user.companyName,
-    });
-  }
+  useEffect(() => {
+    if (user) {
+      setFormData({
+        firstName: user.firstName || "",
+        lastName: user.lastName || "",
+        gender: user.gender || "",
+        companyName: user.companyName || "",
+      });
+    }
+  }, [user]);
 
   const handleChange = (e) => {
     setFormData((prev) => ({
@@ -45,13 +49,13 @@ const Profile = () => {
     }
   };
 
-  if (isLoading) {
-    return <Loader />;
-  }
+  const handleLogout = () => {
+    localStorage.removeItem("token");
+    navigate("/");
+  };
 
-  if (error) {
-    return <StyledProfile>Failed to load user profile.</StyledProfile>;
-  }
+  if (isLoading) return <Loader />;
+  if (error) return <StyledProfile>Failed to load user profile.</StyledProfile>;
 
   return (
     <StyledProfile>
@@ -98,6 +102,13 @@ const Profile = () => {
           />
           <Button type="submit" variant="contained" className="submit-button">
             Save Changes
+          </Button>
+          <Button
+            variant="outlined"
+            className="logout-button"
+            onClick={handleLogout}
+          >
+            Logout
           </Button>
         </form>
       </div>
