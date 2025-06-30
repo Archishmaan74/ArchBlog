@@ -14,21 +14,20 @@ import java.time.LocalTime;
 @AllArgsConstructor
 @NoArgsConstructor
 public class BlogEntity {
+
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
-    private String firstName;
-    private String lastName;
-    private String blogTitle;
 
-    @Column(name = "user_email", nullable = true)
-    private String userEmail;
+    private String blogTitle;
 
     @Lob
     private String blogContent;
 
     private LocalDate dateOfBlog;
     private LocalTime timeOfBlog;
-    private String gender;
-    private String companyName;
+
+    @ManyToOne
+    @JoinColumn(name = "user_id")
+    private UserEntity user;
 }

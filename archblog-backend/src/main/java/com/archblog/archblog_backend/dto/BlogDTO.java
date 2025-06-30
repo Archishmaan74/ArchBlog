@@ -10,15 +10,17 @@ import java.time.LocalTime;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class BlogDTO{
+public class BlogDTO {
     private Long id;
-    private String firstName;
-    private String lastName;
     private String title;
     private String content;
-    public String userEmail;
+    private String userEmail;
     private LocalDate dateOfBlog;
     private LocalTime timeOfBlog;
+
+    // Populated only in response
+    private String firstName;
+    private String lastName;
     private String gender;
     private String companyName;
 }

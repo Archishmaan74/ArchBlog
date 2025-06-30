@@ -11,7 +11,7 @@ import java.util.Date;
 public class JwtUtil {
 
     private static final String SECRET = "archishmaanSuperSecretKeyForJWT123456";
-    private static final long EXPIRATION_TIME = 1000 * 60 * 60 * 10; // 10 hours
+    private static final long EXPIRATION_TIME = 1000 * 60 * 60 * 2; // 10 hours
 
     private final Key key = Keys.hmacShaKeyFor(SECRET.getBytes());
 

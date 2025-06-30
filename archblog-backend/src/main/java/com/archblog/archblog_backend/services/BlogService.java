@@ -2,8 +2,11 @@ package com.archblog.archblog_backend.services;
 
 import com.archblog.archblog_backend.dto.BlogDTO;
 import com.archblog.archblog_backend.entities.BlogEntity;
+import com.archblog.archblog_backend.entities.UserEntity;
 import com.archblog.archblog_backend.repositories.BlogRepository;
+import com.archblog.archblog_backend.repositories.UserRepository;
 import org.modelmapper.ModelMapper;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
@@ -15,10 +18,12 @@ import java.util.stream.Collectors;
 public class BlogService {
 
     final BlogRepository blogRepository;
+    final UserRepository userRepository;
     final ModelMapper modelMapper;
 
-    public BlogService(BlogRepository blogRepository, ModelMapper modelMapper){
+    public BlogService(BlogRepository blogRepository, UserRepository userRepository, ModelMapper modelMapper) {
         this.blogRepository = blogRepository;
+        this.userRepository = userRepository;
         this.modelMapper = modelMapper;
     }
 
@@ -33,10 +38,29 @@ public class BlogService {
         int count = (int) blogRepository.count();
 
         if (count < 6) {
-            BlogEntity blogEntity = modelMapper.map(blogDTO, BlogEntity.class);
+            String email = blogDTO.getUserEmail();
+            UserEntity user = userRepository.findByEmail(email)
+                    .orElseThrow(() -> new UsernameNotFoundException("User not found"));
+
+            BlogEntity blogEntity = new BlogEntity();
+            blogEntity.setBlogTitle(blogDTO.getTitle());
+            blogEntity.setBlogContent(blogDTO.getContent());
             blogEntity.setDateOfBlog(LocalDate.now());
             blogEntity.setTimeOfBlog(LocalTime.now());
-            return modelMapper.map(blogRepository.save(blogEntity), BlogDTO.class);
+            blogEntity.setUser(user);
+
+            BlogEntity saved = blogRepository.save(blogEntity);
+
+            BlogDTO response = new BlogDTO();
+            response.setId(saved.getId());
+            response.setTitle(saved.getBlogTitle());
+            response.setContent(saved.getBlogContent());
+            response.setUserEmail(user.getEmail());
+            response.setDateOfBlog(saved.getDateOfBlog());
+            response.setTimeOfBlog(saved.getTimeOfBlog());
+
+            return response;
+
         } else {
             throw new RuntimeException("Cannot create more than 6 blogs!");
         }
@@ -44,7 +68,7 @@ public class BlogService {
 
     public String deleteBlog(Long id) {
         boolean isPresent = blogRepository.existsById(id);
-        if(!isPresent) return "Oops! Blog details not present!";
+        if (!isPresent) return "Oops! Blog details not present!";
         blogRepository.deleteById(id);
         return "Blog details deleted!";
     }
@@ -53,14 +77,10 @@ public class BlogService {
         BlogEntity existingBlogEntity = blogRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Blog not found with id: " + id));
 
-        existingBlogEntity.setFirstName(edittedBlogDTO.getFirstName());
-        existingBlogEntity.setLastName(edittedBlogDTO.getLastName());
         existingBlogEntity.setBlogTitle(edittedBlogDTO.getTitle());
         existingBlogEntity.setBlogContent(edittedBlogDTO.getContent());
         existingBlogEntity.setDateOfBlog(edittedBlogDTO.getDateOfBlog());
         existingBlogEntity.setTimeOfBlog(edittedBlogDTO.getTimeOfBlog());
-        existingBlogEntity.setGender(edittedBlogDTO.getGender());
-        existingBlogEntity.setCompanyName(edittedBlogDTO.getCompanyName());
 
         BlogEntity edittedBlogEntity = blogRepository.save(existingBlogEntity);
         return modelMapper.map(edittedBlogEntity, BlogDTO.class);
@@ -73,5 +93,4 @@ public class BlogService {
                 .map(blog -> modelMapper.map(blog, BlogDTO.class))
                 .collect(Collectors.toList());
     }
-
 }
