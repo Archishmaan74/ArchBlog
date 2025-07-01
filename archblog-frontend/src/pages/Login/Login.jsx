@@ -3,14 +3,14 @@ import { Paper, Typography, TextField, Button } from "@mui/material";
 import GoogleIcon from "@mui/icons-material/Google";
 import StyledLogin from "./LoginStyles";
 import { Link, useNavigate } from "react-router-dom";
-import { useLoginUserMutation } from "../../app/services/authApi";
+import { usePostLoginUserMutation } from "../../app/services/authApi";
 import Loader from "../../components/Loader/Loader";
 
 const Login = () => {
   const [formData, setFormData] = useState({ email: "", password: "" });
   const [errors, setErrors] = useState({ email: false, password: false });
   const navigate = useNavigate();
-  const [loginUser, { isLoading }] = useLoginUserMutation();
+  const [loginUser, { isLoading }] = usePostLoginUserMutation();
 
   const handleChange = (e) => {
     setFormData((prev) => ({ ...prev, [e.target.name]: e.target.value }));

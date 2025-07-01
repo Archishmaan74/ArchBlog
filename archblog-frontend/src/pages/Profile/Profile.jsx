@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import {
   useGetLoggedInUserQuery,
-  useUpdateUserMutation,
+  usePutUpdateUserMutation,
 } from "../../app/services/authApi";
 import StyledProfile from "./ProfileStyles";
 import { TextField, Button } from "@mui/material";
@@ -11,7 +11,7 @@ import { useNavigate } from "react-router-dom";
 const Profile = () => {
   const navigate = useNavigate();
   const { data: user, isLoading, error } = useGetLoggedInUserQuery();
-  const [updateUser] = useUpdateUserMutation();
+  const [updateUser] = usePutUpdateUserMutation();
 
   const [formData, setFormData] = useState({
     firstName: "",

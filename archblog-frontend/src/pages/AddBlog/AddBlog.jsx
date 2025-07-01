@@ -1,12 +1,12 @@
 import { useState } from "react";
-import { useAddBlogMutation } from "../../app/services/blogApi";
+import { usePostAddBlogMutation } from "../../app/services/blogApi";
 import StyledAddBlog from "./AddBlogStyles";
 import { TextField, Button } from "@mui/material";
 import { Navigate } from "react-router-dom";
 import Loader from "../../components/Loader/Loader";
 
 const AddBlog = () => {
-  const [addBlog] = useAddBlogMutation();
+  const [addBlog] = usePostAddBlogMutation();
 
   const [formData, setFormData] = useState({
     title: "",

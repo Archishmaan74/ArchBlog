@@ -19,7 +19,7 @@ export const authApi = createApi({
   }),
   tagTypes: ["User"],
   endpoints: (builder) => ({
-    loginUser: builder.mutation({
+    postLoginUser: builder.mutation({
       query: (credentials) => ({
         url: "/auth/login",
         method: "POST",
@@ -32,7 +32,7 @@ export const authApi = createApi({
       providesTags: ["User"],
     }),
 
-    updateUser: builder.mutation({
+    putUpdateUser: builder.mutation({
       query: (updatedUser) => ({
         url: "/auth/profile",
         method: "PUT",
@@ -44,7 +44,7 @@ export const authApi = createApi({
 });
 
 export const {
-  useLoginUserMutation,
+  usePostLoginUserMutation,
   useGetLoggedInUserQuery,
-  useUpdateUserMutation,
+  usePutUpdateUserMutation,
 } = authApi;

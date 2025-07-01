@@ -22,7 +22,7 @@ export const blogApi = createApi({
       query: () => "/blogs/myblogs",
     }),
 
-    addBlog: builder.mutation({
+    postAddBlog: builder.mutation({
       query: ({ title, content }) => ({
         url: "/blogs",
         method: "POST",
@@ -36,5 +36,5 @@ export const blogApi = createApi({
   }),
 });
 
-export const { useGetBlogsQuery, useAddBlogMutation, useGetMyBlogsQuery } =
+export const { useGetBlogsQuery, usePostAddBlogMutation, useGetMyBlogsQuery } =
   blogApi;
