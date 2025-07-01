@@ -1,7 +1,9 @@
 package com.archblog.archblog_backend.controllers;
 
+import com.archblog.archblog_backend.dto.EmailRequestDTO;
 import com.archblog.archblog_backend.dto.JwtResponse;
 import com.archblog.archblog_backend.dto.LoginDTO;
+import com.archblog.archblog_backend.dto.ResetPasswordRequestDTO;
 import com.archblog.archblog_backend.dto.UserDTO;
 import com.archblog.archblog_backend.services.UserService;
 import org.springframework.http.ResponseEntity;
@@ -33,8 +35,18 @@ public class UserController {
 
     @GetMapping("/profile")
     public ResponseEntity<UserDTO> getLoggedInUser(Authentication authentication) {
-        String email = authentication.getName(); // From token
+        String email = authentication.getName();
         UserDTO userDTO = userService.getProfile(email);
         return ResponseEntity.ok(userDTO);
+    }
+
+    @PostMapping("/forgot-password")
+    public ResponseEntity<String> sendOtp(@RequestBody EmailRequestDTO request) {
+        return userService.sendOtpToEmail(request.getEmail());
+    }
+
+    @PostMapping("/reset-password")
+    public ResponseEntity<String> resetPassword(@RequestBody ResetPasswordRequestDTO request) {
+        return userService.resetPasswordWithOtp(request);
     }
 }
