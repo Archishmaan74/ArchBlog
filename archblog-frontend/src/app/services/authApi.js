@@ -4,11 +4,16 @@ export const authApi = createApi({
   reducerPath: "authApi",
   baseQuery: fetchBaseQuery({
     baseUrl: "http://localhost:8080",
-    prepareHeaders: (headers) => {
-      const token = localStorage.getItem("token");
-      if (token) {
-        headers.set("Authorization", `Bearer ${token}`);
+    prepareHeaders: (headers, { endpoint }) => {
+      const publicEndpoints = ["loginUser"];
+
+      if (!publicEndpoints.includes(endpoint)) {
+        const token = localStorage.getItem("token");
+        if (token) {
+          headers.set("Authorization", `Bearer ${token}`);
+        }
       }
+
       return headers;
     },
   }),
