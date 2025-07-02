@@ -3,12 +3,14 @@ import StyledForgotPassword from "./ForgotPasswordStyles";
 import { Paper, Typography, TextField, Button } from "@mui/material";
 import { usePostForgotPasswordMutation } from "../../app/services/authApi";
 import Loader from "../../components/Loader/Loader";
+import { useNavigate } from "react-router-dom";
 
 function ForgotPassword() {
   const [formData, setFormData] = useState({ email: "" });
   const [errors, setErrors] = useState({ email: false });
-  const [forgotPasswordUser, { isLoading }] = usePostForgotPasswordMutation();
   const [message, setMessage] = useState("");
+  const [forgotPasswordUser, { isLoading }] = usePostForgotPasswordMutation();
+  const navigate = useNavigate();
 
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
@@ -31,6 +33,7 @@ function ForgotPassword() {
     try {
       const result = await forgotPasswordUser(formData);
       setMessage("OTP sent to your email successfully!");
+      navigate("/resetpassword", { replace: true });
     } catch (error) {
       setMessage("Failed to send OTP. Please check your email.");
     }
