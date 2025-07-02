@@ -78,22 +78,22 @@ public class UserService {
     }
 
     public ResponseEntity<String> resetPasswordWithOtp(ResetPasswordRequestDTO request) {
-        String savedOtp = otpStorage.get(request.getEmail());
+        String email = otpStorage.entrySet().stream()
+                .filter(entry -> entry.getValue().equals(request.getOtp()))
+                .map(Map.Entry::getKey)
+                .findFirst()
+                .orElse(null);
 
-        if (savedOtp == null) {
-            return ResponseEntity.badRequest().body("OTP not found for this email.");
+        if (email == null) {
+            return ResponseEntity.badRequest().body("Invalid or expired OTP.");
         }
 
-        if (!savedOtp.equals(request.getOtp())) {
-            return ResponseEntity.badRequest().body("Invalid OTP.");
-        }
-
-        UserEntity user = userRepository.findByEmail(request.getEmail())
+        UserEntity user = userRepository.findByEmail(email)
                 .orElseThrow(() -> new RuntimeException("User not found"));
 
         user.setPassword(passwordEncoder.encode(request.getNewPassword()));
         userRepository.save(user);
-        otpStorage.remove(request.getEmail());
+        otpStorage.remove(email);
 
         return ResponseEntity.ok("Password reset successfully.");
     }
