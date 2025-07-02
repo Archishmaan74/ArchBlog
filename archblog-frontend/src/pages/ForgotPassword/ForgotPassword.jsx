@@ -1,18 +1,47 @@
 import { useState } from "react";
 import StyledForgotPassword from "./ForgotPasswordStyles";
 import { Paper, Typography, TextField, Button } from "@mui/material";
+import { usePostForgotPasswordMutation } from "../../app/services/authApi";
+import Loader from "../../components/Loader/Loader";
 
 function ForgotPassword() {
-  const [formData, setFormData] = useState({ email: "", password: "" });
-  const [errors, setErrors] = useState({ email: false, password: false });
+  const [formData, setFormData] = useState({ email: "" });
+  const [errors, setErrors] = useState({ email: false });
+  const [forgotPasswordUser, { isLoading }] = usePostForgotPasswordMutation();
+  const [message, setMessage] = useState("");
 
-  const handleChange = () => {};
-  const handleSubmit = () => {};
+  const handleChange = (e) => {
+    setFormData({ ...formData, [e.target.name]: e.target.value });
+    setErrors({ ...errors, [e.target.name]: false });
+    setMessage("");
+  };
+
+  const validateForm = () => {
+    const newErrors = {
+      email: !formData.email,
+    };
+    setErrors(newErrors);
+    return !newErrors.email;
+  };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    if (!validateForm()) return;
+
+    try {
+      const result = await forgotPasswordUser(formData);
+      setMessage("OTP sent to your email successfully!");
+    } catch (error) {
+      setMessage("Failed to send OTP. Please check your email.");
+    }
+  };
+
   return (
     <StyledForgotPassword>
       <Typography className="forgotpassword-title">
-        Pls reset your password here by providing your email!
+        Please reset your password by providing your email
       </Typography>
+
       <Paper className="forgotpassword-paper" elevation={10}>
         <form className="forgotpassword-form" onSubmit={handleSubmit}>
           <TextField
@@ -22,13 +51,25 @@ function ForgotPassword() {
             variant="outlined"
             fullWidth
             required
-            // value={value}
+            value={formData.email}
             onChange={handleChange}
             className="forgotpassword-textfield"
-          ></TextField>
+            error={errors.email}
+            helperText={errors.email ? "Email is required" : ""}
+          />
 
-          <Button className="otp-button">Send OTP</Button>
+          {isLoading ? (
+            <Loader small />
+          ) : (
+            <Button type="submit" className="otp-button" variant="contained">
+              Send OTP
+            </Button>
+          )}
         </form>
+
+        {message && (
+          <Typography className="forgotpassword-message">{message}</Typography>
+        )}
       </Paper>
     </StyledForgotPassword>
   );

@@ -19,7 +19,6 @@ const StyledForgotPassword = styled("div")(({ theme }) => ({
 
     [theme.breakpoints.down("md")]: {
       fontSize: 24,
-      marginTop: -100,
     },
   },
 
@@ -56,6 +55,22 @@ const StyledForgotPassword = styled("div")(({ theme }) => ({
     color: "#fff",
   },
 
+  "& .forgotpassword-textfield .MuiInputBase-root.Mui-focused": {
+    backgroundColor: "#2b2b2b",
+  },
+
+  "& .forgotpassword-textfield input": {
+    caretColor: "#FF6D00",
+  },
+
+  "& .forgotpassword-textfield .MuiOutlinedInput-notchedOutline": {
+    borderColor: "#555",
+  },
+
+  "& .forgotpassword-textfield .Mui-focused .MuiOutlinedInput-notchedOutline": {
+    borderColor: "#FF6D00",
+  },
+
   "& .forgotpassword-textfield .MuiInputLabel-root": {
     color: "#bbb",
   },
@@ -73,6 +88,10 @@ const StyledForgotPassword = styled("div")(({ theme }) => ({
 
   "& .otp-button:hover": {
     backgroundColor: "#e65c00",
+  },
+
+  "& .forgotpassword-loader": {
+    height: 10,
   },
 }));
 
