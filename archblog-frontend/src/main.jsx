@@ -19,6 +19,7 @@ const SignUp = lazy(() => import("./pages/SignUp/SignUp"));
 const ForgotPassword = lazy(() =>
   import("./pages/ForgotPassword/ForgotPassword")
 );
+const ResetPassword = lazy(() => import("./pages/ResetPassword/ResetPassword"));
 const Home = lazy(() => import("./pages/Home/Home"));
 const AddBlog = lazy(() => import("./pages/AddBlog/AddBlog"));
 const MyBlogs = lazy(() => import("./pages/MyBlogs/MyBlogs"));
@@ -32,6 +33,7 @@ const router = createBrowserRouter(
         <Route path="/login" element={<Login />} />
         <Route path="/signup" element={<SignUp />} />
         <Route path="/forgotpassword" element={<ForgotPassword />} />
+        <Route path="/resetpassword" element={<ResetPassword />} />
       </Route>
 
       <Route element={<AppLayout />}>
