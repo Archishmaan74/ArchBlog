@@ -1,29 +1,28 @@
 import { styled } from "@mui/material/styles";
 import { CircularProgress } from "@mui/material";
 
-const StyledLoader = styled("div")(({ theme }) => ({
-  height: 600,
+const StyledLoader = styled("div")(({ theme, small }) => ({
+  height: small ? "auto" : 600,
   display: "flex",
   justifyContent: "center",
   alignItems: "center",
   backgroundColor: "inherit",
-  padding: theme.spacing(4),
+  padding: small ? theme.spacing(0.5) : theme.spacing(4),
 
   [theme.breakpoints.down("md")]: {
-    height: 400,
-    padding: theme.spacing(2),
+    height: small ? "auto" : 400,
+    padding: small ? theme.spacing(0.5) : theme.spacing(2),
   },
 
   "& .loader-spinner": {
-    width: 40,
-    height: 40,
+    width: small ? 20 : 40,
+    height: small ? 20 : 40,
     color: theme.palette.warning.main,
-    thickness: 4,
   },
 }));
 
-const Loader = () => (
-  <StyledLoader>
+const Loader = ({ small = false }) => (
+  <StyledLoader small={small}>
     <CircularProgress className="loader-spinner" />
   </StyledLoader>
 );

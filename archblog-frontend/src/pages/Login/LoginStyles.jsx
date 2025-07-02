@@ -48,6 +48,14 @@ const StyledLogin = styled("div")(({ theme }) => ({
     color: "#fff",
   },
 
+  "& .login-textfield .MuiInputBase-root.Mui-focused": {
+    backgroundColor: "#2b2b2b",
+  },
+
+  "& .login-textfield input": {
+    caretColor: "#FF6D00",
+  },
+
   "& .login-textfield .MuiInputLabel-root": {
     color: "#bbb",
   },
@@ -70,6 +78,10 @@ const StyledLogin = styled("div")(({ theme }) => ({
     fontWeight: "bold",
   },
 
+  "& .login-button:hover": {
+    backgroundColor: "#e65c00",
+  },
+
   "& .googlesignin-button": {
     marginTop: theme.spacing(2),
     width: "100%",
@@ -82,10 +94,6 @@ const StyledLogin = styled("div")(({ theme }) => ({
     "&:hover": {
       backgroundColor: "#f5f5f5",
     },
-  },
-
-  "& .login-button:hover": {
-    backgroundColor: "#e65c00",
   },
 
   "& .forgot-password": {
@@ -106,6 +114,7 @@ const StyledLogin = styled("div")(({ theme }) => ({
     marginTop: 12,
     fontSize: 14,
   },
+
   "& .signup-link": {
     textDecoration: "none",
     "&:hover": {

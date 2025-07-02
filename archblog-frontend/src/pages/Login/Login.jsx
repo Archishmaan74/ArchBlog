@@ -96,7 +96,7 @@ const Login = () => {
           </Link>
 
           {isLoading ? (
-            <Loader />
+            <Loader small />
           ) : (
             <Button type="submit" variant="contained" className="login-button">
               Login
