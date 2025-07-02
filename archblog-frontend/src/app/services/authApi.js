@@ -5,7 +5,11 @@ export const authApi = createApi({
   baseQuery: fetchBaseQuery({
     baseUrl: "http://localhost:8080",
     prepareHeaders: (headers, { endpoint }) => {
-      const publicEndpoints = ["loginUser"];
+      const publicEndpoints = [
+        "postLoginUser",
+        "postForgotPassword",
+        "postResetPassword",
+      ];
 
       if (!publicEndpoints.includes(endpoint)) {
         const token = localStorage.getItem("token");
@@ -40,6 +44,22 @@ export const authApi = createApi({
       }),
       invalidatesTags: ["User"],
     }),
+
+    postForgotPassword: builder.mutation({
+      query: (emailData) => ({
+        url: "/auth/forgot-password",
+        method: "POST",
+        body: emailData,
+      }),
+    }),
+
+    postResetPassword: builder.mutation({
+      query: (resetData) => ({
+        url: "/auth/reset-password",
+        method: "POST",
+        body: resetData,
+      }),
+    }),
   }),
 });
 
@@ -47,4 +67,6 @@ export const {
   usePostLoginUserMutation,
   useGetLoggedInUserQuery,
   usePutUpdateUserMutation,
+  usePostForgotPasswordMutation,
+  usePostResetPasswordMutation,
 } = authApi;
