@@ -43,6 +43,10 @@ public class UserService {
     }
 
     public UserDTO register(UserDTO userDTO, String password) {
+        if (userRepository.count() >= 200) {
+            throw new RuntimeException("Cannot register more than 200 users!");
+        }
+
         if (userRepository.existsByEmail(userDTO.getEmail())) {
             throw new RuntimeException("User already exists with email: " + userDTO.getEmail());
         }

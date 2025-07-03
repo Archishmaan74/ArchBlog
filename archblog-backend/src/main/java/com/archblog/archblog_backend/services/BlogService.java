@@ -35,10 +35,8 @@ public class BlogService {
     }
 
     public BlogDTO createBlog(BlogDTO blogDTO) {
-        int count = (int) blogRepository.count();
-
-        if (count >= 6) {
-            throw new RuntimeException("Cannot create more than 6 blogs!");
+        if (blogRepository.count() >= 500) {
+            throw new RuntimeException("Cannot create more than 500 blogs!");
         }
 
         String email = blogDTO.getUserEmail();
