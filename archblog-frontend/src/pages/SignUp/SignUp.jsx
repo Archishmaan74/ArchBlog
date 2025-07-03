@@ -53,6 +53,7 @@ function SignUp() {
 
     try {
       await registerUser(formData).unwrap();
+      alert("You are registered successfully!");
       navigate("/login");
     } catch (err) {
       alert("Registration failed. Please try again.");

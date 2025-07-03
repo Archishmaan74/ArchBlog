@@ -103,14 +103,6 @@ const Login = () => {
             </Button>
           )}
 
-          <Button
-            type="button"
-            className="googlesignin-button"
-            startIcon={<GoogleIcon />}
-          >
-            Sign In with Google
-          </Button>
-
           <Typography className="signup-text">
             Don't have an account?{" "}
             <Link to="/signup" className="signup-link">
