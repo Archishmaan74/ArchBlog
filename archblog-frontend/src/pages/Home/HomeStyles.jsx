@@ -1,17 +1,21 @@
 import { styled } from "@mui/material/styles";
 
 const StyledHome = styled("div")(({ theme }) => ({
-  padding: `${theme.spacing(4)} ${theme.spacing(20)}`,
-  [theme.breakpoints.down("md")]: {
-    padding: theme.spacing(4),
-  },
+  maxWidth: 800,
+  margin: "0 auto",
+  padding: theme.spacing(2),
   color: "#fff",
+
+  [theme.breakpoints.down("md")]: {
+    padding: theme.spacing(2),
+  },
 
   "& .home-title": {
     marginBottom: theme.spacing(3),
     color: "#FF6D00",
     fontWeight: 600,
-    fontSize: "2rem",
+    fontSize: 32,
+    textAlign: "center",
   },
 
   "& .blog-card": {
@@ -24,6 +28,7 @@ const StyledHome = styled("div")(({ theme }) => ({
   "& .blog-title": {
     color: "#FF9100",
     fontWeight: 600,
+    fontSize: 20,
   },
 
   "& .blog-genre": {
