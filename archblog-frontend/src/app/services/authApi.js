@@ -7,6 +7,7 @@ export const authApi = createApi({
     prepareHeaders: (headers, { endpoint }) => {
       const publicEndpoints = [
         "postLoginUser",
+        "postRegisterUser",
         "postForgotPassword",
         "postResetPassword",
       ];
@@ -28,6 +29,14 @@ export const authApi = createApi({
         url: "/auth/login",
         method: "POST",
         body: credentials,
+      }),
+    }),
+
+    postRegisterUser: builder.mutation({
+      query: (userData) => ({
+        url: "/auth/register",
+        method: "POST",
+        body: userData,
       }),
     }),
 
@@ -65,6 +74,7 @@ export const authApi = createApi({
 
 export const {
   usePostLoginUserMutation,
+  usePostRegisterUserMutation,
   useGetLoggedInUserQuery,
   usePutUpdateUserMutation,
   usePostForgotPasswordMutation,
