@@ -51,7 +51,7 @@ const Profile = () => {
 
   const handleLogout = () => {
     localStorage.removeItem("token");
-    navigate("/");
+    navigate("/login", { replace: true });
   };
 
   if (isLoading) return <Loader />;
