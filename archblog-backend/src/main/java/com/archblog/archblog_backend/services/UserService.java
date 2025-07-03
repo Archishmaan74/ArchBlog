@@ -1,10 +1,7 @@
 package com.archblog.archblog_backend.services;
 
 import com.archblog.archblog_backend.configuration.JwtUtil;
-import com.archblog.archblog_backend.dto.JwtResponse;
-import com.archblog.archblog_backend.dto.LoginDTO;
-import com.archblog.archblog_backend.dto.ResetPasswordRequestDTO;
-import com.archblog.archblog_backend.dto.UserDTO;
+import com.archblog.archblog_backend.dto.*;
 import com.archblog.archblog_backend.entities.UserEntity;
 import com.archblog.archblog_backend.repositories.UserRepository;
 import org.modelmapper.ModelMapper;
@@ -46,6 +43,10 @@ public class UserService {
     }
 
     public UserDTO register(UserDTO userDTO, String password) {
+        if (userRepository.existsByEmail(userDTO.getEmail())) {
+            throw new RuntimeException("User already exists with email: " + userDTO.getEmail());
+        }
+
         UserEntity user = modelMapper.map(userDTO, UserEntity.class);
         user.setPassword(passwordEncoder.encode(password));
         UserEntity savedUser = userRepository.save(user);
@@ -56,6 +57,7 @@ public class UserService {
         authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(loginDTO.getEmail(), loginDTO.getPassword())
         );
+
         UserEntity user = userRepository.findByEmail(loginDTO.getEmail())
                 .orElseThrow(() -> new RuntimeException("User not found"));
 

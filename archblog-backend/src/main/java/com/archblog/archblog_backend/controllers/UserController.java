@@ -1,10 +1,6 @@
 package com.archblog.archblog_backend.controllers;
 
-import com.archblog.archblog_backend.dto.EmailRequestDTO;
-import com.archblog.archblog_backend.dto.JwtResponse;
-import com.archblog.archblog_backend.dto.LoginDTO;
-import com.archblog.archblog_backend.dto.ResetPasswordRequestDTO;
-import com.archblog.archblog_backend.dto.UserDTO;
+import com.archblog.archblog_backend.dto.*;
 import com.archblog.archblog_backend.services.UserService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
@@ -21,9 +17,16 @@ public class UserController {
     }
 
     @PostMapping("/register")
-    public ResponseEntity<UserDTO> registerUser(@RequestBody UserDTO userDTO,
-                                                @RequestParam String password) {
-        UserDTO registeredUser = userService.register(userDTO, password);
+    public ResponseEntity<UserDTO> registerUser(@RequestBody RegisterRequestDTO request) {
+        UserDTO userDTO = UserDTO.builder()
+                .firstName(request.getFirstName())
+                .lastName(request.getLastName())
+                .gender(request.getGender())
+                .companyName(request.getCompanyName())
+                .email(request.getEmail())
+                .build();
+
+        UserDTO registeredUser = userService.register(userDTO, request.getPassword());
         return ResponseEntity.ok(registeredUser);
     }
 
