@@ -169,7 +169,7 @@ function SignUp() {
           )}
 
           <Typography className="signup-text">
-            Already have an account?
+            Already have an account?{" "}
             <Link to="/login" className="signup-link">
               Login
             </Link>
