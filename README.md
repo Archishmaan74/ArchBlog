@@ -1,18 +1,24 @@
 # ArchBlog
 
-ArchBlog is a full-stack personal blogging platform where users can create, read, and share blog posts. Built with React for the frontend, Spring Boot (3-layer architecture) for the backend, and PostgreSQL as the cloud-hosted database, ArchBlog is a clean, scalable solution for publishing thoughts and ideas.
+**Live Demo:** [https://archblog-trend.netlify.app/](https://archblog-trend.netlify.app/)
+
+![ArchBlog](https://github.com/user-attachments/assets/fd3cfaa1-5a86-4e40-8d8b-d04df867bc2f)
+
+ArchBlog is a full-stack blogging platform where users can write, edit, and share blog posts. It is built using React for the frontend and Spring Boot for the backend. The data is stored in a PostgreSQL database hosted on the cloud.
+
+This project includes user login with JWT, blog management features, and password reset through email OTP. The user interface is designed to work well on both desktop and mobile devices.
 
 ---
 
 ## Features
 
-- User authentication using JWT
-- Create, update, and delete blog posts
-- View all blogs or filter by user
-- Profile management
-- Forgot password and OTP-based password reset via email
-- Fully responsive frontend using Material-UI
-- Seamless integration between frontend and backend using RESTful APIs
+- User login and registration using JWT
+- Create, edit, and delete blog posts
+- View all blogs or only your blogs
+- Edit user profile information
+- Forgot password and reset password via email OTP
+- Responsive design using Material-UI
+- Smooth connection between frontend and backend using REST APIs
 
 ---
 
@@ -22,14 +28,14 @@ ArchBlog is a full-stack personal blogging platform where users can create, read
 - React (Vite)
 - Redux Toolkit
 - RTK Query
-- Material-UI (MUI)
+- Material-UI
 - React Router
 
 ### Backend
 - Spring Boot (3-layer architecture)
-- Spring Security (JWT-based)
-- Java MailSender for sending OTP emails
-- PostgreSQL (cloud-hosted)
+- Spring Security with JWT
+- Java MailSender for OTP emails
+- PostgreSQL
 - ModelMapper
 
 ---
@@ -37,10 +43,10 @@ ArchBlog is a full-stack personal blogging platform where users can create, read
 ## Architecture
 
 **Backend:**
-- 3-layered architecture: Controller → Service → Repository
-- DTOs for clean and secure data transfer
-- Authentication using JWT and custom security configuration
-- OTP-based password reset functionality
+- Controller → Service → Repository structure
+- DTOs used for clean data transfer
+- Secure JWT-based authentication
+- OTP functionality for password reset
 
 ---
 
