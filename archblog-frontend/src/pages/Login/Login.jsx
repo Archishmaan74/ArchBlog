@@ -1,6 +1,5 @@
 import { useState } from "react";
 import { Paper, Typography, TextField, Button } from "@mui/material";
-import GoogleIcon from "@mui/icons-material/Google";
 import StyledLogin from "./LoginStyles";
 import { Link, useNavigate } from "react-router-dom";
 import { usePostLoginUserMutation } from "../../app/services/authApi";
