@@ -2,7 +2,7 @@
 
 **Live Demo:** [https://archblog-trend.netlify.app/](https://archblog-trend.netlify.app/)
 
-![ArchBlog](https://github.com/user-attachments/assets/fd3cfaa1-5a86-4e40-8d8b-d04df867bc2f)
+![ArchBlog_1](https://github.com/user-attachments/assets/af791eba-51c0-4d4d-8f8a-3ac0b4a3ae64)
 
 ArchBlog is a full-stack blogging platform where users can write, edit, and share blog posts. It is built using React for the frontend and Spring Boot for the backend. The data is stored in a PostgreSQL database hosted on the cloud.
 
