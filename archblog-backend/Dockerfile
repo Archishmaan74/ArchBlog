@@ -12,7 +12,7 @@ RUN mvn clean package -DskipTests
 
 
 # ---------- Stage 2: Run the JAR ----------
-FROM openjdk:17-jdk-slim
+FROM eclipse-temurin:17-jre-jammy
 
 # Set working directory in runtime container
 WORKDIR /app
