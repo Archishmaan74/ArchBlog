@@ -43,7 +43,7 @@ public class UserController {
 
     @PostMapping("/login")
     public ResponseEntity<ApiResponse<JwtResponse>> loginUser(
-            @RequestBody LoginDTO loginDTO) {
+            @Valid @RequestBody LoginDTO loginDTO) {
 
         JwtResponse jwtResponse = userService.login(loginDTO);
 
@@ -74,7 +74,7 @@ public class UserController {
 
     @PostMapping("/forgot-password")
     public ResponseEntity<ApiResponse<String>> sendOtp(
-            @RequestBody EmailRequestDTO request) {
+            @Valid @RequestBody EmailRequestDTO request) {
 
         String message = userService.sendOtpToEmail(request.getEmail());
 
@@ -89,7 +89,7 @@ public class UserController {
 
     @PostMapping("/reset-password")
     public ResponseEntity<ApiResponse<String>> resetPassword(
-            @RequestBody ResetPasswordRequestDTO request) {
+            @Valid @RequestBody ResetPasswordRequestDTO request) {
 
         String message = userService.resetPasswordWithOtp(request);
 
