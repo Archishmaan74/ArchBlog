@@ -17,7 +17,9 @@ public class UserController {
     }
 
     @PostMapping("/register")
-    public ResponseEntity<UserDTO> registerUser(@RequestBody RegisterRequestDTO request) {
+    public ResponseEntity<ApiResponse<UserDTO>> registerUser(
+            @RequestBody RegisterRequestDTO request) {
+
         UserDTO userDTO = UserDTO.builder()
                 .firstName(request.getFirstName())
                 .lastName(request.getLastName())
@@ -26,30 +28,82 @@ public class UserController {
                 .email(request.getEmail())
                 .build();
 
-        UserDTO registeredUser = userService.register(userDTO, request.getPassword());
-        return ResponseEntity.ok(registeredUser);
+        UserDTO registeredUser =
+                userService.register(userDTO, request.getPassword());
+
+        return ResponseEntity.ok(
+                new ApiResponse<>(
+                        "SUCCESS",
+                        "User registered successfully",
+                        registeredUser
+                )
+        );
     }
 
     @PostMapping("/login")
-    public ResponseEntity<JwtResponse> loginUser(@RequestBody LoginDTO loginDTO) {
+    public ResponseEntity<ApiResponse<JwtResponse>> loginUser(
+            @RequestBody LoginDTO loginDTO) {
+
         JwtResponse jwtResponse = userService.login(loginDTO);
-        return ResponseEntity.ok(jwtResponse);
+
+        return ResponseEntity.ok(
+                new ApiResponse<>(
+                        "SUCCESS",
+                        "Login successful",
+                        jwtResponse
+                )
+        );
     }
 
     @GetMapping("/profile")
-    public ResponseEntity<UserDTO> getLoggedInUser(Authentication authentication) {
+    public ResponseEntity<ApiResponse<UserDTO>> getLoggedInUser(
+            Authentication authentication) {
+
         String email = authentication.getName();
         UserDTO userDTO = userService.getProfile(email);
-        return ResponseEntity.ok(userDTO);
+
+        return ResponseEntity.ok(
+                new ApiResponse<>(
+                        "SUCCESS",
+                        "Profile fetched successfully",
+                        userDTO
+                )
+        );
     }
 
     @PostMapping("/forgot-password")
-    public ResponseEntity<String> sendOtp(@RequestBody EmailRequestDTO request) {
-        return userService.sendOtpToEmail(request.getEmail());
+    public ResponseEntity<ApiResponse<String>> sendOtp(
+            @RequestBody EmailRequestDTO request) {
+
+        ResponseEntity<String> response =
+                userService.sendOtpToEmail(request.getEmail());
+
+        return ResponseEntity
+                .status(response.getStatusCode())
+                .body(
+                        new ApiResponse<>(
+                                "SUCCESS",
+                                response.getBody(),
+                                response.getBody()
+                        )
+                );
     }
 
     @PostMapping("/reset-password")
-    public ResponseEntity<String> resetPassword(@RequestBody ResetPasswordRequestDTO request) {
-        return userService.resetPasswordWithOtp(request);
+    public ResponseEntity<ApiResponse<String>> resetPassword(
+            @RequestBody ResetPasswordRequestDTO request) {
+
+        ResponseEntity<String> response =
+                userService.resetPasswordWithOtp(request);
+
+        return ResponseEntity
+                .status(response.getStatusCode())
+                .body(
+                        new ApiResponse<>(
+                                "SUCCESS",
+                                response.getBody(),
+                                response.getBody()
+                        )
+                );
     }
 }
