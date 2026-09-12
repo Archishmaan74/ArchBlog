@@ -3,10 +3,11 @@ package com.archblog.archblog_backend.services;
 import com.archblog.archblog_backend.dto.BlogDTO;
 import com.archblog.archblog_backend.entities.BlogEntity;
 import com.archblog.archblog_backend.entities.UserEntity;
+import com.archblog.archblog_backend.exceptions.LimitExceededException;
+import com.archblog.archblog_backend.exceptions.ResourceNotFoundException;
 import com.archblog.archblog_backend.repositories.BlogRepository;
 import com.archblog.archblog_backend.repositories.UserRepository;
 import org.modelmapper.ModelMapper;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
@@ -36,12 +37,12 @@ public class BlogService {
 
     public BlogDTO createBlog(BlogDTO blogDTO) {
         if (blogRepository.count() >= 500) {
-            throw new RuntimeException("Cannot create more than 500 blogs!");
+            throw new LimitExceededException("Cannot create more than 500 blogs!");
         }
 
         String email = blogDTO.getUserEmail();
         UserEntity user = userRepository.findByEmail(email)
-                .orElseThrow(() -> new UsernameNotFoundException("User not found"));
+                .orElseThrow(() -> new ResourceNotFoundException("User not found"));
 
         BlogEntity blogEntity = new BlogEntity();
         blogEntity.setBlogTitle(blogDTO.getTitle());
@@ -56,14 +57,14 @@ public class BlogService {
 
     public String deleteBlog(Long id) {
         boolean isPresent = blogRepository.existsById(id);
-        if (!isPresent) return "Oops! Blog details not present!";
+        if (!isPresent) throw new ResourceNotFoundException("Blog not found with id: " + id);
         blogRepository.deleteById(id);
         return "Blog details deleted!";
     }
 
     public BlogDTO editBlog(BlogDTO edittedBlogDTO, Long id) {
         BlogEntity existingBlogEntity = blogRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Blog not found with id: " + id));
+                .orElseThrow(() -> new ResourceNotFoundException("Blog not found with id: " + id));
 
         existingBlogEntity.setBlogTitle(edittedBlogDTO.getTitle());
         existingBlogEntity.setBlogContent(edittedBlogDTO.getContent());

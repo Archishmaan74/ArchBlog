@@ -2,6 +2,7 @@ package com.archblog.archblog_backend.controllers;
 
 import com.archblog.archblog_backend.dto.*;
 import com.archblog.archblog_backend.services.UserService;
+import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
@@ -18,7 +19,7 @@ public class UserController {
 
     @PostMapping("/register")
     public ResponseEntity<ApiResponse<UserDTO>> registerUser(
-            @RequestBody RegisterRequestDTO request) {
+            @Valid @RequestBody RegisterRequestDTO request) {
 
         UserDTO userDTO = UserDTO.builder()
                 .firstName(request.getFirstName())
@@ -75,35 +76,29 @@ public class UserController {
     public ResponseEntity<ApiResponse<String>> sendOtp(
             @RequestBody EmailRequestDTO request) {
 
-        ResponseEntity<String> response =
-                userService.sendOtpToEmail(request.getEmail());
+        String message = userService.sendOtpToEmail(request.getEmail());
 
-        return ResponseEntity
-                .status(response.getStatusCode())
-                .body(
-                        new ApiResponse<>(
-                                "SUCCESS",
-                                response.getBody(),
-                                response.getBody()
-                        )
-                );
+        return ResponseEntity.ok(
+                new ApiResponse<>(
+                        "SUCCESS",
+                        message,
+                        message
+                )
+        );
     }
 
     @PostMapping("/reset-password")
     public ResponseEntity<ApiResponse<String>> resetPassword(
             @RequestBody ResetPasswordRequestDTO request) {
 
-        ResponseEntity<String> response =
-                userService.resetPasswordWithOtp(request);
+        String message = userService.resetPasswordWithOtp(request);
 
-        return ResponseEntity
-                .status(response.getStatusCode())
-                .body(
-                        new ApiResponse<>(
-                                "SUCCESS",
-                                response.getBody(),
-                                response.getBody()
-                        )
-                );
+        return ResponseEntity.ok(
+                new ApiResponse<>(
+                        "SUCCESS",
+                        message,
+                        message
+                )
+        );
     }
 }
