@@ -25,4 +25,7 @@ jobs:
 
       - name: Run tests
         working-directory: archblog-backend
+        env:
+          DB_USERNAME: ${{ secrets.DB_USERNAME }}
+          DB_PASSWORD: ${{ secrets.DB_PASSWORD }}
         run: mvn --batch-mode test
