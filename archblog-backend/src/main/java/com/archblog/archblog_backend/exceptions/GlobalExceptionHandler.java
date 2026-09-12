@@ -122,6 +122,17 @@ public class GlobalExceptionHandler {
                 .body(response);
     }
 
+    @ExceptionHandler(EmailSendingException.class)
+    public ResponseEntity<ApiResponse<Void>> handleEmailSending(
+            EmailSendingException exception) {
+        ApiResponse<Void> response = new ApiResponse<>(
+                "ERROR",
+                exception.getMessage(),
+                null
+        );
+        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(response);
+    }
+
     @ExceptionHandler(Exception.class)
     public ResponseEntity<ApiResponse<Void>> handleException(Exception exception) {
 
