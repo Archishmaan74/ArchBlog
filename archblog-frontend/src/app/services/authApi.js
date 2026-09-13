@@ -1,27 +1,40 @@
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 
+const baseQuery = fetchBaseQuery({
+  baseUrl: import.meta.env.VITE_API_BASE_URL || "http://localhost:8080",
+  prepareHeaders: (headers, { endpoint }) => {
+    const publicEndpoints = [
+      "postLoginUser",
+      "postRegisterUser",
+      "postForgotPassword",
+      "postResetPassword",
+    ];
+
+    if (!publicEndpoints.includes(endpoint)) {
+      const token = localStorage.getItem("token");
+
+      if (token) {
+        headers.set("Authorization", `Bearer ${token}`);
+      }
+    }
+
+    return headers;
+  },
+});
+
+const baseQueryWithResponseData = async (args, api, extraOptions) => {
+  const result = await baseQuery(args, api, extraOptions);
+
+  if (result.data) {
+    result.data = result.data.data;
+  }
+
+  return result;
+};
+
 export const authApi = createApi({
   reducerPath: "authApi",
-  baseQuery: fetchBaseQuery({
-    baseUrl: import.meta.env.VITE_API_BASE_URL || "http://localhost:8080",
-    prepareHeaders: (headers, { endpoint }) => {
-      const publicEndpoints = [
-        "postLoginUser",
-        "postRegisterUser",
-        "postForgotPassword",
-        "postResetPassword",
-      ];
-
-      if (!publicEndpoints.includes(endpoint)) {
-        const token = localStorage.getItem("token");
-        if (token) {
-          headers.set("Authorization", `Bearer ${token}`);
-        }
-      }
-
-      return headers;
-    },
-  }),
+  baseQuery: baseQueryWithResponseData,
   tagTypes: ["User"],
   endpoints: (builder) => ({
     postLoginUser: builder.mutation({
