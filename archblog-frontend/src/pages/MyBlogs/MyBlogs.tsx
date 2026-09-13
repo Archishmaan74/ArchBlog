@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, type ChangeEvent } from "react";
 import {
   Typography,
   TextField,
@@ -21,20 +21,26 @@ import {
 import StyledMyBlogs from "./MyBlogsStyles";
 import Loader from "../../components/Loader/Loader";
 import { formatDateTime } from "../../utils/helper";
+import type { Blog } from "../../types/blog";
 
 const MyBlogs = () => {
   const { data: blogs, error, isLoading } = useGetMyBlogsQuery();
   const [deleteBlog] = useDeleteBlogMutation();
   const [editBlog] = useEditBlogMutation();
 
-  const [editModeId, setEditModeId] = useState(null);
-  const [editedData, setEditedData] = useState({ title: "", content: "" });
+  const [editModeId, setEditModeId] = useState<number | null>(null);
+  const [editedData, setEditedData] = useState({
+    title: "",
+    content: "",
+  });
 
-  const handleDelete = async (id) => {
+  const handleDelete = async (id: number) => {
     const confirm = window.confirm(
-      "Are you sure you want to delete this blog?"
+      "Are you sure you want to delete this blog?",
     );
+
     if (!confirm) return;
+
     try {
       await deleteBlog(id).unwrap();
       alert("Blog deleted successfully.");
@@ -44,17 +50,23 @@ const MyBlogs = () => {
     }
   };
 
-  const handleEditClick = (blog) => {
+  const handleEditClick = (blog: Blog) => {
     setEditModeId(blog.id);
-    setEditedData({ title: blog.title, content: blog.content });
+    setEditedData({
+      title: blog.title,
+      content: blog.content,
+    });
   };
 
   const handleCancel = () => {
     setEditModeId(null);
-    setEditedData({ title: "", content: "" });
+    setEditedData({
+      title: "",
+      content: "",
+    });
   };
 
-  const handleSave = async (id) => {
+  const handleSave = async (id: number) => {
     try {
       await editBlog({ id, ...editedData }).unwrap();
       alert("Blog updated successfully.");
@@ -65,8 +77,11 @@ const MyBlogs = () => {
     }
   };
 
-  const handleChange = (e) => {
-    setEditedData({ ...editedData, [e.target.name]: e.target.value });
+  const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
+    setEditedData({
+      ...editedData,
+      [e.target.name]: e.target.value,
+    });
   };
 
   if (isLoading) return <Loader />;
@@ -85,7 +100,7 @@ const MyBlogs = () => {
     <StyledMyBlogs>
       <Typography className="home-title">Your Blogs</Typography>
 
-      {blogs?.length > 0 ? (
+      {blogs && blogs.length > 0 ? (
         blogs.map((blog) => {
           const {
             id,
@@ -96,6 +111,7 @@ const MyBlogs = () => {
             timeOfBlog,
             dateOfBlog,
           } = blog;
+
           const { dateStr, timeStr } = formatDateTime(dateOfBlog, timeOfBlog);
 
           return (

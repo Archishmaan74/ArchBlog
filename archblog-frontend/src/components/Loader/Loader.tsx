@@ -1,7 +1,15 @@
 import { styled } from "@mui/material/styles";
 import { CircularProgress } from "@mui/material";
 
-const StyledLoader = styled("div")(({ theme, small }) => ({
+interface LoaderProps {
+  small?: boolean;
+}
+
+interface StyledLoaderProps {
+  small: boolean;
+}
+
+const StyledLoader = styled("div")<StyledLoaderProps>(({ theme, small }) => ({
   height: small ? "auto" : 600,
   display: "flex",
   justifyContent: "center",
@@ -21,7 +29,7 @@ const StyledLoader = styled("div")(({ theme, small }) => ({
   },
 }));
 
-const Loader = ({ small = false }) => (
+const Loader = ({ small = false }: LoaderProps) => (
   <StyledLoader small={small}>
     <CircularProgress className="loader-spinner" />
   </StyledLoader>

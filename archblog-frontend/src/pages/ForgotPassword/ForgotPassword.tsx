@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, type ChangeEvent, type SyntheticEvent } from "react";
 import StyledForgotPassword from "./ForgotPasswordStyles";
 import { Paper, Typography, TextField, Button } from "@mui/material";
 import { usePostForgotPasswordMutation } from "../../app/services/authApi";
@@ -12,7 +12,7 @@ function ForgotPassword() {
   const [forgotPasswordUser, { isLoading }] = usePostForgotPasswordMutation();
   const navigate = useNavigate();
 
-  const handleChange = (e) => {
+  const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
     setErrors({ ...errors, [e.target.name]: false });
     setMessage("");
@@ -22,16 +22,18 @@ function ForgotPassword() {
     const newErrors = {
       email: !formData.email,
     };
+
     setErrors(newErrors);
     return !newErrors.email;
   };
 
-  const handleSubmit = async (e) => {
+  const handleSubmit = async (e: SyntheticEvent<HTMLFormElement>) => {
     e.preventDefault();
+
     if (!validateForm()) return;
 
     try {
-      const result = await forgotPasswordUser(formData);
+      await forgotPasswordUser(formData).unwrap();
       setMessage("OTP sent to your email successfully!");
       navigate("/resetpassword", { replace: true });
     } catch (error) {

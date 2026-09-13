@@ -1,11 +1,11 @@
-import { useState } from "react";
+import { useState, type ChangeEvent, type SyntheticEvent } from "react";
 import { Typography, Paper, TextField, Button, MenuItem } from "@mui/material";
 import StyledLogin from "../../pages/Login/LoginStyles";
 import Loader from "../../components/Loader/Loader";
 import { Link, useNavigate } from "react-router-dom";
 import { usePostRegisterUserMutation } from "../../app/services/authApi";
 
-function SignUp() {
+const SignUp = () => {
   const initialState = {
     firstName: "",
     lastName: "",
@@ -16,39 +16,41 @@ function SignUp() {
   };
 
   const [formData, setFormData] = useState(initialState);
-  const [errors, setErrors] = useState({});
+  const [errors, setErrors] = useState<Record<string, boolean>>({});
   const navigate = useNavigate();
   const [registerUser, { isLoading }] = usePostRegisterUserMutation();
 
-  const handleChange = (e) => {
+  const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
-    setFormData((prev) => ({ ...prev, [name]: value }));
-    setErrors((prev) => ({ ...prev, [name]: false }));
+
+    setFormData((prev) => ({
+      ...prev,
+      [name]: value,
+    }));
+
+    setErrors((prev) => ({
+      ...prev,
+      [name]: false,
+    }));
   };
 
   const validateForm = () => {
-    const newErrors = {};
-    const fields = [
-      "firstName",
-      "lastName",
-      "gender",
-      "companyName",
-      "email",
-      "password",
-    ];
+    const newErrors: Record<string, boolean> = {};
 
-    fields.forEach((field) => {
-      if (formData[field].trim() === "") {
+    Object.entries(formData).forEach(([field, value]) => {
+      if (value.trim() === "") {
         newErrors[field] = true;
       }
     });
 
     setErrors(newErrors);
+
     return Object.keys(newErrors).length === 0;
   };
 
-  const handleSubmit = async (e) => {
+  const handleSubmit = async (e: SyntheticEvent<HTMLFormElement>) => {
     e.preventDefault();
+
     if (!validateForm()) return;
 
     try {
@@ -178,6 +180,6 @@ function SignUp() {
       </Paper>
     </StyledLogin>
   );
-}
+};
 
 export default SignUp;

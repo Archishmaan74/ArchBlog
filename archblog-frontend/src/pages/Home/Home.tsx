@@ -23,7 +23,7 @@ const Home = () => {
     <StyledHome>
       <Typography className="home-title">All Blogs</Typography>
 
-      {blogs?.length > 0 ? (
+      {blogs && blogs.length > 0 ? (
         blogs.map(
           ({
             id,
@@ -48,7 +48,7 @@ const Home = () => {
                 </Typography>
               </div>
             );
-          }
+          },
         )
       ) : (
         <Typography>No blogs found.</Typography>

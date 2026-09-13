@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, type ChangeEvent, type SyntheticEvent } from "react";
 import { Paper, Typography, TextField, Button } from "@mui/material";
 import StyledLogin from "./LoginStyles";
 import { Link, useNavigate } from "react-router-dom";
@@ -11,7 +11,7 @@ const Login = () => {
   const navigate = useNavigate();
   const [loginUser, { isLoading }] = usePostLoginUserMutation();
 
-  const handleChange = (e) => {
+  const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
     setFormData((prev) => ({ ...prev, [e.target.name]: e.target.value }));
     setErrors((prev) => ({ ...prev, [e.target.name]: false }));
   };
@@ -21,12 +21,14 @@ const Login = () => {
       email: !formData.email,
       password: !formData.password,
     };
+
     setErrors(newErrors);
     return !newErrors.email && !newErrors.password;
   };
 
-  const handleSubmit = async (e) => {
+  const handleSubmit = async (e: SyntheticEvent<HTMLFormElement>) => {
     e.preventDefault();
+
     if (!validateForm()) return;
 
     try {
@@ -36,7 +38,6 @@ const Login = () => {
       if (token) {
         localStorage.setItem("token", token);
         localStorage.setItem("user", JSON.stringify(user));
-
         navigate("/home", { replace: true });
       } else {
         alert("Invalid credentials.");

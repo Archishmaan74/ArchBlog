@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, type ChangeEvent, type SyntheticEvent } from "react";
 import StyledForgotPassword from "../../pages/ForgotPassword/ForgotPasswordStyles";
 import { Paper, Typography, TextField, Button } from "@mui/material";
 import { usePostResetPasswordMutation } from "../../app/services/authApi";
@@ -7,13 +7,23 @@ import { useNavigate } from "react-router-dom";
 
 function ResetPassword() {
   const [formData, setFormData] = useState({ otp: "", newPassword: "" });
-  const [errors, setErrors] = useState({ otp: false, newPassword: false });
+  const [errors, setErrors] = useState({
+    otp: false,
+    newPassword: false,
+  });
   const [resetPasswordUser, { isLoading }] = usePostResetPasswordMutation();
   const navigate = useNavigate();
 
-  const handleChange = (e) => {
-    setFormData({ ...formData, [e.target.name]: e.target.value });
-    setErrors({ ...errors, [e.target.name]: false });
+  const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
+    setFormData({
+      ...formData,
+      [e.target.name]: e.target.value,
+    });
+
+    setErrors({
+      ...errors,
+      [e.target.name]: false,
+    });
   };
 
   const validateForm = () => {
@@ -21,20 +31,21 @@ function ResetPassword() {
       otp: !formData.otp,
       newPassword: !formData.newPassword,
     };
+
     setErrors(newErrors);
+
     return !newErrors.otp && !newErrors.newPassword;
   };
 
-  const handleSubmit = async (e) => {
+  const handleSubmit = async (e: SyntheticEvent<HTMLFormElement>) => {
     e.preventDefault();
+
     if (!validateForm()) return;
 
     try {
-      const result = await resetPasswordUser(formData);
-      if (result) {
-        alert("Password reset successful!");
-        navigate("/", { replace: true });
-      }
+      await resetPasswordUser(formData).unwrap();
+      alert("Password reset successful!");
+      navigate("/", { replace: true });
     } catch (error) {
       alert("Failed to reset password. Please try again.");
     }

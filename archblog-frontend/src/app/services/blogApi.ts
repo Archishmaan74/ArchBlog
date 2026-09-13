@@ -1,4 +1,6 @@
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
+import { ApiResponse } from "../../types/api";
+import { Blog, BlogRequest } from "../../types/blog";
 
 const baseQuery = fetchBaseQuery({
   baseUrl: import.meta.env.VITE_API_BASE_URL || "http://localhost:8080",
@@ -13,32 +15,24 @@ const baseQuery = fetchBaseQuery({
   },
 });
 
-const baseQueryWithResponseData = async (args, api, extraOptions) => {
-  const result = await baseQuery(args, api, extraOptions);
-
-  if (result.data) {
-    result.data = result.data.data;
-  }
-
-  return result;
-};
-
 export const blogApi = createApi({
   reducerPath: "blogApi",
-  baseQuery: baseQueryWithResponseData,
+  baseQuery,
   tagTypes: ["Blogs"],
   endpoints: (builder) => ({
-    getBlogs: builder.query({
+    getBlogs: builder.query<Blog[], void>({
       query: () => "/blogs",
       providesTags: ["Blogs"],
+      transformResponse: (response: ApiResponse<Blog[]>) => response.data,
     }),
 
-    getMyBlogs: builder.query({
+    getMyBlogs: builder.query<Blog[], void>({
       query: () => "/blogs/myblogs",
       providesTags: ["Blogs"],
+      transformResponse: (response: ApiResponse<Blog[]>) => response.data,
     }),
 
-    postAddBlog: builder.mutation({
+    postAddBlog: builder.mutation<Blog, BlogRequest>({
       query: ({ title, content }) => ({
         url: "/blogs",
         method: "POST",
@@ -48,17 +42,19 @@ export const blogApi = createApi({
         },
       }),
       invalidatesTags: ["Blogs"],
+      transformResponse: (response: ApiResponse<Blog>) => response.data,
     }),
 
-    deleteBlog: builder.mutation({
+    deleteBlog: builder.mutation<string, number>({
       query: (id) => ({
         url: `/blogs/${id}`,
         method: "DELETE",
       }),
       invalidatesTags: ["Blogs"],
+      transformResponse: (response: ApiResponse<string>) => response.data,
     }),
 
-    editBlog: builder.mutation({
+    editBlog: builder.mutation<Blog, BlogRequest & { id: number }>({
       query: ({ id, title, content }) => ({
         url: `/blogs/${id}`,
         method: "PUT",
@@ -68,6 +64,7 @@ export const blogApi = createApi({
         },
       }),
       invalidatesTags: ["Blogs"],
+      transformResponse: (response: ApiResponse<Blog>) => response.data,
     }),
   }),
 });

@@ -1,4 +1,4 @@
-export const formatDateTime = (date, time) => {
+export const formatDateTime = (date: string, time: string) => {
   const dateTime = new Date(`${date}T${time}`);
 
   const dateStr = dateTime.toLocaleDateString("en-IN");

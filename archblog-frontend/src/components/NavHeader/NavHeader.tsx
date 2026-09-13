@@ -38,7 +38,7 @@ const NavHeader = () => {
     <Box sx={{ width: 250 }} onClick={handleDrawerToggle}>
       <List>
         {drawerItems.map((item) => (
-          <ListItem button key={item.label} component={Link} to={item.to}>
+          <ListItem key={item.label} component={Link} to={item.to}>
             <ListItemIcon>{item.icon}</ListItemIcon>
             <ListItemText primary={item.label} />
           </ListItem>
