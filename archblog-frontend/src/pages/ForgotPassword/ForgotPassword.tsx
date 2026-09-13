@@ -1,21 +1,34 @@
-import { useState, type ChangeEvent, type SyntheticEvent } from "react";
+import {
+  useEffect,
+  useState,
+  type ChangeEvent,
+  type SyntheticEvent,
+} from "react";
 import StyledForgotPassword from "./ForgotPasswordStyles";
 import { Paper, Typography, TextField, Button } from "@mui/material";
 import { usePostForgotPasswordMutation } from "../../app/services/authApi";
 import Loader from "../../components/Loader/Loader";
+import ErrorModal from "../../components/ErrorModal/ErrorModal";
+import { getApiErrorMessage } from "../../utils/apiError";
 import { useNavigate } from "react-router-dom";
 
 function ForgotPassword() {
   const [formData, setFormData] = useState({ email: "" });
   const [errors, setErrors] = useState({ email: false });
-  const [message, setMessage] = useState("");
-  const [forgotPasswordUser, { isLoading }] = usePostForgotPasswordMutation();
+  const [showError, setShowError] = useState(false);
+  const [forgotPasswordUser, { isLoading, error }] =
+    usePostForgotPasswordMutation();
   const navigate = useNavigate();
+
+  useEffect(() => {
+    if (error) {
+      setShowError(true);
+    }
+  }, [error]);
 
   const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
     setErrors({ ...errors, [e.target.name]: false });
-    setMessage("");
   };
 
   const validateForm = () => {
@@ -34,15 +47,20 @@ function ForgotPassword() {
 
     try {
       await forgotPasswordUser(formData).unwrap();
-      setMessage("OTP sent to your email successfully!");
       navigate("/resetpassword", { replace: true });
-    } catch (error) {
-      setMessage("Failed to send OTP. Please check your email.");
+    } catch (err) {
+      console.error(err);
     }
   };
 
   return (
     <StyledForgotPassword>
+      <ErrorModal
+        open={showError}
+        message={error ? getApiErrorMessage(error) : ""}
+        onClose={() => setShowError(false)}
+      />
+
       <Typography className="forgotpassword-title">
         Please reset your password by providing your email
       </Typography>
@@ -71,10 +89,6 @@ function ForgotPassword() {
             </Button>
           )}
         </form>
-
-        {message && (
-          <Typography className="forgotpassword-message">{message}</Typography>
-        )}
       </Paper>
     </StyledForgotPassword>
   );

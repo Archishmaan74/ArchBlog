@@ -4,6 +4,7 @@ import { Blog, BlogRequest } from "../../types/blog";
 
 const baseQuery = fetchBaseQuery({
   baseUrl: import.meta.env.VITE_API_BASE_URL || "http://localhost:8080",
+  timeout: 10000,
   prepareHeaders: (headers) => {
     const token = localStorage.getItem("token");
 

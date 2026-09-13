@@ -1,4 +1,4 @@
-import { useState, type ChangeEvent } from "react";
+import { useEffect, useState, type ChangeEvent } from "react";
 import {
   Typography,
   TextField,
@@ -20,19 +20,29 @@ import {
 } from "../../app/services/blogApi";
 import StyledMyBlogs from "./MyBlogsStyles";
 import Loader from "../../components/Loader/Loader";
+import ErrorModal from "../../components/ErrorModal/ErrorModal";
+import EmptyState from "../../components/EmptyState/EmptyState";
 import { formatDateTime } from "../../utils/helper";
+import { getApiErrorMessage } from "../../utils/apiError";
 import type { Blog } from "../../types/blog";
 
 const MyBlogs = () => {
   const { data: blogs, error, isLoading } = useGetMyBlogsQuery();
-  const [deleteBlog] = useDeleteBlogMutation();
-  const [editBlog] = useEditBlogMutation();
+  const [deleteBlog, { error: deleteError }] = useDeleteBlogMutation();
+  const [editBlog, { error: editError }] = useEditBlogMutation();
 
   const [editModeId, setEditModeId] = useState<number | null>(null);
   const [editedData, setEditedData] = useState({
     title: "",
     content: "",
   });
+  const [showError, setShowError] = useState(false);
+
+  useEffect(() => {
+    if (error || deleteError || editError) {
+      setShowError(true);
+    }
+  }, [error, deleteError, editError]);
 
   const handleDelete = async (id: number) => {
     const confirm = window.confirm(
@@ -43,10 +53,8 @@ const MyBlogs = () => {
 
     try {
       await deleteBlog(id).unwrap();
-      alert("Blog deleted successfully.");
     } catch (err) {
       console.error(err);
-      alert("Failed to delete blog.");
     }
   };
 
@@ -69,11 +77,9 @@ const MyBlogs = () => {
   const handleSave = async (id: number) => {
     try {
       await editBlog({ id, ...editedData }).unwrap();
-      alert("Blog updated successfully.");
       setEditModeId(null);
     } catch (err) {
       console.error(err);
-      alert("Failed to update blog.");
     }
   };
 
@@ -86,18 +92,16 @@ const MyBlogs = () => {
 
   if (isLoading) return <Loader />;
 
-  if (error) {
-    return (
-      <StyledMyBlogs>
-        <Typography color="error">
-          Failed to load your blogs. Please try again.
-        </Typography>
-      </StyledMyBlogs>
-    );
-  }
+  const currentError = error || deleteError || editError;
 
   return (
     <StyledMyBlogs>
+      <ErrorModal
+        open={showError}
+        message={currentError ? getApiErrorMessage(currentError) : ""}
+        onClose={() => setShowError(false)}
+      />
+
       <Typography className="home-title">Your Blogs</Typography>
 
       {blogs && blogs.length > 0 ? (
@@ -165,11 +169,8 @@ const MyBlogs = () => {
                           <EditIcon />
                         </IconButton>
                       </Tooltip>
-                      <Tooltip title="Delete">
-                        <IconButton
-                          color="error"
-                          onClick={() => handleDelete(id)}
-                        >
+                      <Tooltip title="Delete" onClick={() => handleDelete(id)}>
+                        <IconButton color="error">
                           <DeleteIcon />
                         </IconButton>
                       </Tooltip>
@@ -189,7 +190,10 @@ const MyBlogs = () => {
           );
         })
       ) : (
-        <Typography>No blogs posted by you yet.</Typography>
+        <EmptyState
+          title="No blogs yet"
+          message="You haven't published any blogs yet."
+        />
       )}
     </StyledMyBlogs>
   );

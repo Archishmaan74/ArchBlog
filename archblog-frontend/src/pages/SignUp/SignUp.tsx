@@ -1,7 +1,14 @@
-import { useState, type ChangeEvent, type SyntheticEvent } from "react";
+import {
+  useEffect,
+  useState,
+  type ChangeEvent,
+  type SyntheticEvent,
+} from "react";
 import { Typography, Paper, TextField, Button, MenuItem } from "@mui/material";
 import StyledLogin from "../../pages/Login/LoginStyles";
 import Loader from "../../components/Loader/Loader";
+import ErrorModal from "../../components/ErrorModal/ErrorModal";
+import { getApiErrorMessage } from "../../utils/apiError";
 import { Link, useNavigate } from "react-router-dom";
 import { usePostRegisterUserMutation } from "../../app/services/authApi";
 
@@ -17,8 +24,15 @@ const SignUp = () => {
 
   const [formData, setFormData] = useState(initialState);
   const [errors, setErrors] = useState<Record<string, boolean>>({});
+  const [showError, setShowError] = useState(false);
   const navigate = useNavigate();
-  const [registerUser, { isLoading }] = usePostRegisterUserMutation();
+  const [registerUser, { isLoading, error }] = usePostRegisterUserMutation();
+
+  useEffect(() => {
+    if (error) {
+      setShowError(true);
+    }
+  }, [error]);
 
   const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
@@ -55,15 +69,20 @@ const SignUp = () => {
 
     try {
       await registerUser(formData).unwrap();
-      alert("You are registered successfully!");
       navigate("/login");
     } catch (err) {
-      alert("Registration failed. Please try again.");
+      console.error(err);
     }
   };
 
   return (
     <StyledLogin>
+      <ErrorModal
+        open={showError}
+        message={error ? getApiErrorMessage(error) : ""}
+        onClose={() => setShowError(false)}
+      />
+
       <Paper className="login-paper" elevation={10}>
         <form onSubmit={handleSubmit}>
           <div className="login-header">

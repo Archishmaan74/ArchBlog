@@ -1,8 +1,15 @@
-import { useState, type ChangeEvent, type SyntheticEvent } from "react";
+import {
+  useEffect,
+  useState,
+  type ChangeEvent,
+  type SyntheticEvent,
+} from "react";
 import StyledForgotPassword from "../../pages/ForgotPassword/ForgotPasswordStyles";
 import { Paper, Typography, TextField, Button } from "@mui/material";
 import { usePostResetPasswordMutation } from "../../app/services/authApi";
 import Loader from "../../components/Loader/Loader";
+import ErrorModal from "../../components/ErrorModal/ErrorModal";
+import { getApiErrorMessage } from "../../utils/apiError";
 import { useNavigate } from "react-router-dom";
 
 function ResetPassword() {
@@ -11,8 +18,16 @@ function ResetPassword() {
     otp: false,
     newPassword: false,
   });
-  const [resetPasswordUser, { isLoading }] = usePostResetPasswordMutation();
+  const [showError, setShowError] = useState(false);
+  const [resetPasswordUser, { isLoading, error }] =
+    usePostResetPasswordMutation();
   const navigate = useNavigate();
+
+  useEffect(() => {
+    if (error) {
+      setShowError(true);
+    }
+  }, [error]);
 
   const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
     setFormData({
@@ -44,15 +59,20 @@ function ResetPassword() {
 
     try {
       await resetPasswordUser(formData).unwrap();
-      alert("Password reset successful!");
       navigate("/", { replace: true });
-    } catch (error) {
-      alert("Failed to reset password. Please try again.");
+    } catch (err) {
+      console.error(err);
     }
   };
 
   return (
     <StyledForgotPassword>
+      <ErrorModal
+        open={showError}
+        message={error ? getApiErrorMessage(error) : ""}
+        onClose={() => setShowError(false)}
+      />
+
       <Typography className="forgotpassword-title">
         Enter OTP and your new password
       </Typography>

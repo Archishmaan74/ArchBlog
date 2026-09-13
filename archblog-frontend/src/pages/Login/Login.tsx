@@ -1,15 +1,29 @@
-import { useState, type ChangeEvent, type SyntheticEvent } from "react";
+import {
+  useEffect,
+  useState,
+  type ChangeEvent,
+  type SyntheticEvent,
+} from "react";
 import { Paper, Typography, TextField, Button } from "@mui/material";
 import StyledLogin from "./LoginStyles";
 import { Link, useNavigate } from "react-router-dom";
 import { usePostLoginUserMutation } from "../../app/services/authApi";
 import Loader from "../../components/Loader/Loader";
+import ErrorModal from "../../components/ErrorModal/ErrorModal";
+import { getApiErrorMessage } from "../../utils/apiError";
 
 const Login = () => {
   const [formData, setFormData] = useState({ email: "", password: "" });
   const [errors, setErrors] = useState({ email: false, password: false });
+  const [showError, setShowError] = useState(false);
   const navigate = useNavigate();
-  const [loginUser, { isLoading }] = usePostLoginUserMutation();
+  const [loginUser, { isLoading, error }] = usePostLoginUserMutation();
+
+  useEffect(() => {
+    if (error) {
+      setShowError(true);
+    }
+  }, [error]);
 
   const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
     setFormData((prev) => ({ ...prev, [e.target.name]: e.target.value }));
@@ -32,24 +46,24 @@ const Login = () => {
     if (!validateForm()) return;
 
     try {
-      const result = await loginUser(formData).unwrap();
-      const { token, user } = result;
+      const { token, user } = await loginUser(formData).unwrap();
 
-      if (token) {
-        localStorage.setItem("token", token);
-        localStorage.setItem("user", JSON.stringify(user));
-        navigate("/home", { replace: true });
-      } else {
-        alert("Invalid credentials.");
-      }
+      localStorage.setItem("token", token);
+      localStorage.setItem("user", JSON.stringify(user));
+      navigate("/home", { replace: true });
     } catch (err) {
-      console.error("Login error:", err);
-      alert("Login failed. Please check your credentials.");
+      console.error(err);
     }
   };
 
   return (
     <StyledLogin>
+      <ErrorModal
+        open={showError}
+        message={error ? getApiErrorMessage(error) : ""}
+        onClose={() => setShowError(false)}
+      />
+
       <Paper className="login-paper" elevation={10}>
         <form onSubmit={handleSubmit}>
           <div className="login-header">

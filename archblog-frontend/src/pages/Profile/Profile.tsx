@@ -11,12 +11,14 @@ import {
 import StyledProfile from "./ProfileStyles";
 import { TextField, Button } from "@mui/material";
 import Loader from "../../components/Loader/Loader";
+import ErrorModal from "../../components/ErrorModal/ErrorModal";
+import { getApiErrorMessage } from "../../utils/apiError";
 import { useNavigate } from "react-router-dom";
 
 const Profile = () => {
   const navigate = useNavigate();
   const { data: user, isLoading, error } = useGetLoggedInUserQuery();
-  const [updateUser] = usePutUpdateUserMutation();
+  const [updateUser, { error: updateError }] = usePutUpdateUserMutation();
 
   const [formData, setFormData] = useState({
     firstName: "",
@@ -24,6 +26,7 @@ const Profile = () => {
     gender: "",
     companyName: "",
   });
+  const [showError, setShowError] = useState(false);
 
   useEffect(() => {
     if (user) {
@@ -35,6 +38,12 @@ const Profile = () => {
       });
     }
   }, [user]);
+
+  useEffect(() => {
+    if (error || updateError) {
+      setShowError(true);
+    }
+  }, [error, updateError]);
 
   const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
     setFormData((prev) => ({
@@ -48,10 +57,8 @@ const Profile = () => {
 
     try {
       await updateUser(formData).unwrap();
-      alert("Profile updated successfully!");
     } catch (err) {
-      console.error("Error updating user:", err);
-      alert("Failed to update profile!");
+      console.error(err);
     }
   };
 
@@ -61,12 +68,20 @@ const Profile = () => {
   };
 
   if (isLoading) return <Loader />;
-  if (error) return <StyledProfile>Failed to load user profile.</StyledProfile>;
+
+  const currentError = error || updateError;
 
   return (
     <StyledProfile>
+      <ErrorModal
+        open={showError}
+        message={currentError ? getApiErrorMessage(currentError) : ""}
+        onClose={() => setShowError(false)}
+      />
+
       <div className="profile-paper">
         <h2 className="profile-title">My Profile</h2>
+
         <form onSubmit={handleSubmit}>
           <TextField
             name="firstName"
@@ -78,6 +93,7 @@ const Profile = () => {
             onChange={handleChange}
             required
           />
+
           <TextField
             name="lastName"
             label="Last Name"
@@ -88,6 +104,7 @@ const Profile = () => {
             onChange={handleChange}
             required
           />
+
           <TextField
             name="gender"
             label="Gender"
@@ -97,6 +114,7 @@ const Profile = () => {
             value={formData.gender}
             onChange={handleChange}
           />
+
           <TextField
             name="companyName"
             label="Company Name"
@@ -106,9 +124,11 @@ const Profile = () => {
             value={formData.companyName}
             onChange={handleChange}
           />
+
           <Button type="submit" variant="contained" className="submit-button">
             Save Changes
           </Button>
+
           <Button
             variant="outlined"
             className="logout-button"

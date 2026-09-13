@@ -1,21 +1,32 @@
-import { useState, type ChangeEvent, type SyntheticEvent } from "react";
+import {
+  useEffect,
+  useState,
+  type ChangeEvent,
+  type SyntheticEvent,
+} from "react";
 import { usePostAddBlogMutation } from "../../app/services/blogApi";
 import StyledAddBlog from "./AddBlogStyles";
 import { TextField, Button } from "@mui/material";
 import { Navigate } from "react-router-dom";
 import Loader from "../../components/Loader/Loader";
+import ErrorModal from "../../components/ErrorModal/ErrorModal";
+import { getApiErrorMessage } from "../../utils/apiError";
 
 const AddBlog = () => {
-  const [addBlog] = usePostAddBlogMutation();
+  const [addBlog, { isLoading, error }] = usePostAddBlogMutation();
 
   const [formData, setFormData] = useState({
     title: "",
     content: "",
   });
-
-  const [isSubmitting, setIsSubmitting] = useState(false);
-  const [error, setError] = useState<string | null>(null);
   const [success, setSuccess] = useState(false);
+  const [showError, setShowError] = useState(false);
+
+  useEffect(() => {
+    if (error) {
+      setShowError(true);
+    }
+  }, [error]);
 
   const handleChange = (
     e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
@@ -30,30 +41,32 @@ const AddBlog = () => {
 
   const handleSubmit = async (e: SyntheticEvent<HTMLFormElement>) => {
     e.preventDefault();
-    setIsSubmitting(true);
-    setError(null);
 
     try {
       await addBlog(formData).unwrap();
       setSuccess(true);
       setFormData({ title: "", content: "" });
     } catch (err) {
-      console.error("Failed to add blog:", err);
-      setError("Something went wrong while adding the blog.");
-    } finally {
-      setIsSubmitting(false);
+      console.error(err);
     }
   };
 
   if (success) return <Navigate to="/home" />;
-  if (isSubmitting) return <Loader />;
+  if (isLoading) return <Loader />;
 
   return (
     <StyledAddBlog>
+      <ErrorModal
+        open={showError}
+        message={error ? getApiErrorMessage(error) : ""}
+        onClose={() => setShowError(false)}
+      />
+
       <div className="addblog-paper">
         <div className="addblog-header">
           <h2 className="addblog-title">Add a New Blog</h2>
         </div>
+
         <form onSubmit={handleSubmit}>
           <TextField
             name="title"
@@ -65,6 +78,7 @@ const AddBlog = () => {
             onChange={handleChange}
             required
           />
+
           <TextField
             name="content"
             label="Blog Content"
@@ -77,15 +91,15 @@ const AddBlog = () => {
             onChange={handleChange}
             required
           />
+
           <Button
             type="submit"
             variant="contained"
             className="submit-button"
-            disabled={isSubmitting}
+            disabled={isLoading}
           >
             Post Blog
           </Button>
-          {error && <p style={{ color: "red", marginTop: "1rem" }}>{error}</p>}
         </form>
       </div>
     </StyledAddBlog>
