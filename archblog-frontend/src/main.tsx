@@ -16,8 +16,8 @@ import Loader from "./components/Loader/Loader";
 
 const Login = lazy(() => import("./pages/Login/Login"));
 const SignUp = lazy(() => import("./pages/SignUp/SignUp"));
-const ForgotPassword = lazy(() =>
-  import("./pages/ForgotPassword/ForgotPassword")
+const ForgotPassword = lazy(
+  () => import("./pages/ForgotPassword/ForgotPassword"),
 );
 const ResetPassword = lazy(() => import("./pages/ResetPassword/ResetPassword"));
 const Home = lazy(() => import("./pages/Home/Home"));
@@ -42,11 +42,11 @@ const router = createBrowserRouter(
         <Route path="/myblogs" element={<MyBlogs />} />
         <Route path="/profile" element={<Profile />} />
       </Route>
-    </>
-  )
+    </>,
+  ),
 );
 
-createRoot(document.getElementById("root")).render(
+createRoot(document.getElementById("root")!).render(
   <StrictMode>
     <Provider store={store}>
       <CssBaseline />
@@ -54,5 +54,5 @@ createRoot(document.getElementById("root")).render(
         <RouterProvider router={router} />
       </Suspense>
     </Provider>
-  </StrictMode>
+  </StrictMode>,
 );
