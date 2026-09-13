@@ -1,6 +1,6 @@
 # ArchBlog
 
-**Live Demo:** [https://archblog-trend.netlify.app/](https://archblog-trend.netlify.app/)
+**Live Demo:** [https://archblog-frontend.onrender.com](https://archblog-frontend.onrender.com)
 
 ![ArchBlog_1](https://github.com/user-attachments/assets/af791eba-51c0-4d4d-8f8a-3ac0b4a3ae64)
 
