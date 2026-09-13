@@ -1,4 +1,5 @@
-import { Box, Typography } from "@mui/material";
+import { Typography } from "@mui/material";
+import StyledEmptyState from "./EmptyStateStyles";
 
 interface EmptyStateProps {
   title: string;
@@ -7,12 +8,10 @@ interface EmptyStateProps {
 
 const EmptyState = ({ title, message }: EmptyStateProps) => {
   return (
-    <Box sx={{ textAlign: "center", py: 8 }}>
-      <Typography variant="h6">{title}</Typography>
-      <Typography variant="body2" color="text.secondary">
-        {message}
-      </Typography>
-    </Box>
+    <StyledEmptyState>
+      <Typography className="empty-title">{title}</Typography>
+      <Typography className="empty-message">{message}</Typography>
+    </StyledEmptyState>
   );
 };
 

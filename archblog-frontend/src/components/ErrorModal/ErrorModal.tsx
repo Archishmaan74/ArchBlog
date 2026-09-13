@@ -1,11 +1,6 @@
-import {
-  Button,
-  Dialog,
-  DialogActions,
-  DialogContent,
-  DialogTitle,
-  Typography,
-} from "@mui/material";
+import ErrorOutlineIcon from "@mui/icons-material/ErrorOutline";
+import { Button, DialogContent, DialogTitle, Typography } from "@mui/material";
+import StyledErrorModal, { StyledDialogActions } from "./ErrorModalStyles";
 
 interface ErrorModalProps {
   open: boolean;
@@ -15,17 +10,22 @@ interface ErrorModalProps {
 
 const ErrorModal = ({ open, message, onClose }: ErrorModalProps) => {
   return (
-    <Dialog open={open} onClose={onClose}>
-      <DialogTitle>Something went wrong</DialogTitle>
+    <StyledErrorModal open={open} onClose={onClose}>
+      <DialogTitle>
+        <ErrorOutlineIcon />
+        Something went wrong
+      </DialogTitle>
+
       <DialogContent>
         <Typography>{message}</Typography>
       </DialogContent>
-      <DialogActions>
+
+      <StyledDialogActions>
         <Button onClick={onClose} variant="contained">
           OK
         </Button>
-      </DialogActions>
-    </Dialog>
+      </StyledDialogActions>
+    </StyledErrorModal>
   );
 };
 
