@@ -7,12 +7,10 @@ import {
   Paper,
   Box,
 } from "@mui/material";
-import {
-  Edit as EditIcon,
-  Delete as DeleteIcon,
-  Save,
-  Close,
-} from "@mui/icons-material";
+import EditIcon from "@mui/icons-material/Edit";
+import DeleteIcon from "@mui/icons-material/Delete";
+import Save from "@mui/icons-material/Save";
+import Close from "@mui/icons-material/Close";
 import {
   useGetMyBlogsQuery,
   useDeleteBlogMutation,
