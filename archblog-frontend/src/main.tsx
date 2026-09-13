@@ -13,6 +13,7 @@ import store from "./app/store";
 import AppLayout from "./AppLayout";
 import AuthLayout from "./AuthLayout";
 import Loader from "./components/Loader/Loader";
+import ProtectedRoute from "./components/ProtectedRoute/ProtectedRoute";
 
 const Login = lazy(() => import("./pages/Login/Login"));
 const SignUp = lazy(() => import("./pages/SignUp/SignUp"));
@@ -36,11 +37,13 @@ const router = createBrowserRouter(
         <Route path="/resetpassword" element={<ResetPassword />} />
       </Route>
 
-      <Route element={<AppLayout />}>
-        <Route path="/home" element={<Home />} />
-        <Route path="/write" element={<AddBlog />} />
-        <Route path="/myblogs" element={<MyBlogs />} />
-        <Route path="/profile" element={<Profile />} />
+      <Route element={<ProtectedRoute />}>
+        <Route element={<AppLayout />}>
+          <Route path="/home" element={<Home />} />
+          <Route path="/write" element={<AddBlog />} />
+          <Route path="/myblogs" element={<MyBlogs />} />
+          <Route path="/profile" element={<Profile />} />
+        </Route>
       </Route>
     </>,
   ),
