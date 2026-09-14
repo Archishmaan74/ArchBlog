@@ -13,15 +13,19 @@ import {
   ListItemText,
 } from "@mui/material";
 import MenuIcon from "@mui/icons-material/Menu";
+import DarkModeIcon from "@mui/icons-material/DarkMode";
+import LightModeIcon from "@mui/icons-material/LightMode";
 import { Link } from "react-router-dom";
 import StyledNavHeader from "./NavHeaderStyles";
 import CreateIcon from "@mui/icons-material/Create";
 import PersonIcon from "@mui/icons-material/Person";
 import ArticleIcon from "@mui/icons-material/Article";
 import HomeIcon from "@mui/icons-material/Home";
+import { useTheme } from "../../context/ThemeContext";
 
 const NavHeader = () => {
   const [mobileOpen, setMobileOpen] = useState(false);
+  const { theme, toggleTheme } = useTheme();
 
   const handleDrawerToggle = () => {
     setMobileOpen((prev) => !prev);
@@ -43,6 +47,15 @@ const NavHeader = () => {
             <ListItemText primary={item.label} />
           </ListItem>
         ))}
+
+        <ListItem onClick={toggleTheme}>
+          <ListItemIcon>
+            {theme === "light" ? <DarkModeIcon /> : <LightModeIcon />}
+          </ListItemIcon>
+          <ListItemText
+            primary={theme === "light" ? "Dark Mode" : "Light Mode"}
+          />
+        </ListItem>
       </List>
     </Box>
   );
@@ -74,6 +87,14 @@ const NavHeader = () => {
                 {item.icon}
               </Button>
             ))}
+
+            <IconButton
+              color="inherit"
+              onClick={toggleTheme}
+              aria-label="toggle theme"
+            >
+              {theme === "light" ? <DarkModeIcon /> : <LightModeIcon />}
+            </IconButton>
           </Box>
 
           <IconButton

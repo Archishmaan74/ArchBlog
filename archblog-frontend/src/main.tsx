@@ -14,6 +14,7 @@ import AppLayout from "./AppLayout";
 import AuthLayout from "./AuthLayout";
 import Loader from "./components/Loader/Loader";
 import ProtectedRoute from "./components/ProtectedRoute/ProtectedRoute";
+import { ThemeProvider } from "./context/ThemeContext";
 
 const Login = lazy(() => import("./pages/Login/Login"));
 const SignUp = lazy(() => import("./pages/SignUp/SignUp"));
@@ -51,11 +52,13 @@ const router = createBrowserRouter(
 
 createRoot(document.getElementById("root")!).render(
   <StrictMode>
-    <Provider store={store}>
-      <CssBaseline />
-      <Suspense fallback={<Loader />}>
-        <RouterProvider router={router} />
-      </Suspense>
-    </Provider>
+    <ThemeProvider>
+      <Provider store={store}>
+        <CssBaseline />
+        <Suspense fallback={<Loader />}>
+          <RouterProvider router={router} />
+        </Suspense>
+      </Provider>
+    </ThemeProvider>
   </StrictMode>,
 );
