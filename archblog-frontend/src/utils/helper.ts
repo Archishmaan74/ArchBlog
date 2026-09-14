@@ -1,5 +1,5 @@
 export const formatDateTime = (date: string, time: string) => {
-  const dateTime = new Date(`${date}T${time}`);
+  const dateTime = new Date(`${date}T${time}Z`);
 
   const dateStr = dateTime.toLocaleDateString("en-IN");
   const timeStr = dateTime
