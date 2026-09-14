@@ -2,7 +2,7 @@
 
 **Live Demo:** [https://archblog-frontend.onrender.com](https://archblog-frontend.onrender.com)
 
-![ArchBlog_1](https://github.com/user-attachments/assets/af791eba-51c0-4d4d-8f8a-3ac0b4a3ae64)
+<img width="1918" height="960" alt="ArchBlog_rec (1)" src="https://github.com/user-attachments/assets/7524d36e-625c-4782-9d69-8f9fb3461e50" />
 
 ArchBlog is a full-stack blogging platform where users can write, edit, and share blog posts. It is built using React for the frontend and Spring Boot for the backend. The data is stored in a PostgreSQL database hosted on the cloud.
 
