@@ -12,6 +12,7 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
+import java.time.ZoneOffset;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -47,8 +48,8 @@ public class BlogService {
         BlogEntity blogEntity = new BlogEntity();
         blogEntity.setBlogTitle(blogDTO.getTitle());
         blogEntity.setBlogContent(blogDTO.getContent());
-        blogEntity.setDateOfBlog(LocalDate.now());
-        blogEntity.setTimeOfBlog(LocalTime.now());
+        blogEntity.setDateOfBlog(LocalDate.now(ZoneOffset.UTC));
+        blogEntity.setTimeOfBlog(LocalTime.now(ZoneOffset.UTC));
         blogEntity.setUser(user);
 
         BlogEntity saved = blogRepository.save(blogEntity);
@@ -68,8 +69,6 @@ public class BlogService {
 
         existingBlogEntity.setBlogTitle(edittedBlogDTO.getTitle());
         existingBlogEntity.setBlogContent(edittedBlogDTO.getContent());
-        existingBlogEntity.setDateOfBlog(edittedBlogDTO.getDateOfBlog());
-        existingBlogEntity.setTimeOfBlog(edittedBlogDTO.getTimeOfBlog());
 
         BlogEntity edittedBlogEntity = blogRepository.save(existingBlogEntity);
         return convertToDTO(edittedBlogEntity);
