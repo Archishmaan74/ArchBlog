@@ -6,6 +6,10 @@ const StyledAddBlog = styled("div")(({ theme }) => ({
   justifyContent: "center",
   alignItems: "center",
   padding: theme.spacing(2),
+  [theme.breakpoints.down("sm")]: {
+    alignItems: "flex-start",
+    paddingTop: theme.spacing(2),
+  },
 
   "& .addblog-paper": {
     padding: theme.spacing(4),

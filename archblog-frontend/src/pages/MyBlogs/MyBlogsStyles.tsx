@@ -13,11 +13,12 @@ const StyledMyBlogs = styled("div")(({ theme }) => ({
   },
 
   ".blog-card": {
-    border: "1px solid #ddd",
+    border: `1px solid ${theme.palette.divider}`,
     borderRadius: 12,
     padding: 16,
     marginBottom: 16,
-    backgroundColor: "#fafafa",
+    backgroundColor: theme.palette.background.paper,
+    color: theme.palette.text.primary,
   },
 
   ".blog-header": {
@@ -53,7 +54,7 @@ const StyledMyBlogs = styled("div")(({ theme }) => ({
 
   ".blog-date": {
     fontSize: 14,
-    color: "#666",
+    color: theme.palette.text.secondary,
   },
 
   ".action-buttons": {

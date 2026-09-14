@@ -1,4 +1,5 @@
 import { styled } from "@mui/material/styles";
+import Drawer from "@mui/material/Drawer";
 
 const StyledNavHeader = styled("header")(({ theme }) => ({
   "& .nav-appbar": {
@@ -51,6 +52,25 @@ const StyledNavHeader = styled("header")(({ theme }) => ({
     [theme.breakpoints.down("sm")]: {
       display: "block",
     },
+  },
+}));
+
+export const StyledDrawer = styled(Drawer)(({ theme }) => ({
+  "& .MuiListItem-root": {
+    color: theme.palette.text.primary,
+    textDecoration: "none",
+  },
+
+  "& .MuiListItemIcon-root": {
+    color: theme.palette.text.primary,
+  },
+
+  "& .MuiListItemText-primary": {
+    color: theme.palette.text.primary,
+  },
+
+  "& .MuiDrawer-paper": {
+    transition: "transform 150ms ease-in-out !important",
   },
 }));
 

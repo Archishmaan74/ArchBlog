@@ -6,7 +6,6 @@ import {
   Button,
   Box,
   IconButton,
-  Drawer,
   List,
   ListItem,
   ListItemIcon,
@@ -16,7 +15,7 @@ import MenuIcon from "@mui/icons-material/Menu";
 import DarkModeIcon from "@mui/icons-material/DarkMode";
 import LightModeIcon from "@mui/icons-material/LightMode";
 import { Link } from "react-router-dom";
-import StyledNavHeader from "./NavHeaderStyles";
+import StyledNavHeader, { StyledDrawer } from "./NavHeaderStyles";
 import CreateIcon from "@mui/icons-material/Create";
 import PersonIcon from "@mui/icons-material/Person";
 import ArticleIcon from "@mui/icons-material/Article";
@@ -31,6 +30,10 @@ const NavHeader = () => {
     setMobileOpen((prev) => !prev);
   };
 
+  const handleNavigation = () => {
+    setMobileOpen(false);
+  };
+
   const drawerItems = [
     { label: "Home", icon: <HomeIcon />, to: "/home" },
     { label: "Write", icon: <CreateIcon />, to: "/write" },
@@ -39,10 +42,15 @@ const NavHeader = () => {
   ];
 
   const drawer = (
-    <Box sx={{ width: 250 }} onClick={handleDrawerToggle}>
+    <Box sx={{ width: 250 }}>
       <List>
         {drawerItems.map((item) => (
-          <ListItem key={item.label} component={Link} to={item.to}>
+          <ListItem
+            key={item.label}
+            component={Link}
+            to={item.to}
+            onClick={handleNavigation}
+          >
             <ListItemIcon>{item.icon}</ListItemIcon>
             <ListItemText primary={item.label} />
           </ListItem>
@@ -108,14 +116,14 @@ const NavHeader = () => {
         </Toolbar>
       </AppBar>
 
-      <Drawer
+      <StyledDrawer
         anchor="right"
         open={mobileOpen}
         onClose={handleDrawerToggle}
         ModalProps={{ keepMounted: true }}
       >
         {drawer}
-      </Drawer>
+      </StyledDrawer>
     </StyledNavHeader>
   );
 };
