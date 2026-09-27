@@ -1,47 +1,46 @@
 package com.archblog.archblog_backend.services;
 
 import com.archblog.archblog_backend.exceptions.EmailSendingException;
+import com.resend.Resend;
+import com.resend.core.exception.ResendException;
+import com.resend.services.emails.model.CreateEmailOptions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.mockito.Mock;
-import org.mockito.MockitoAnnotations;
-import org.springframework.mail.SimpleMailMessage;
-import org.springframework.mail.javamail.JavaMailSender;
-import org.springframework.test.util.ReflectionTestUtils;
 
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.RETURNS_DEEP_STUBS;
 import static org.mockito.Mockito.doThrow;
+import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 
 class EmailServiceTest {
 
-    @Mock
-    private JavaMailSender mailSender;
-
+    private Resend resend;
     private EmailService emailService;
 
     @BeforeEach
     void setUp() {
-        MockitoAnnotations.openMocks(this);
-        emailService = new EmailService(mailSender);
-        ReflectionTestUtils.setField(emailService, "from", "test@archblog.com");
+        resend = mock(Resend.class, RETURNS_DEEP_STUBS);
+        emailService = new EmailService(resend, "test@archblog.com");
     }
 
     @Test
-    void shouldSendOtpEmailSuccessfully() {
-
+    void shouldSendOtpEmailSuccessfully() throws ResendException {
         emailService.sendOtpEmail("user@gmail.com", "123456");
 
-        verify(mailSender).send(any(SimpleMailMessage.class));
+        verify(resend.emails()).send(any(CreateEmailOptions.class));
     }
 
     @Test
-    void shouldThrowExceptionWhenEmailSendingFails() {
+    void shouldThrowExceptionWhenEmailSendingFails() throws ResendException {
+        ResendException exception = new ResendException("Email sending failed");
 
-        doThrow(new RuntimeException())
-                .when(mailSender)
-                .send(any(SimpleMailMessage.class));
+        var emails = resend.emails();
+
+        doThrow(exception)
+                .when(emails)
+                .send(any(CreateEmailOptions.class));
 
         assertThrows(
                 EmailSendingException.class,

@@ -1,32 +1,45 @@
 package com.archblog.archblog_backend.services;
 
 import com.archblog.archblog_backend.exceptions.EmailSendingException;
+import com.resend.Resend;
+import com.resend.services.emails.model.CreateEmailOptions;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.mail.SimpleMailMessage;
-import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.stereotype.Service;
 
 @Service
 public class EmailService {
 
-    private final JavaMailSender mailSender;
+    private final Resend resend;
+    private final String from;
 
-    @Value("${spring.mail.username}")
-    private String from;
+    @Autowired
+    public EmailService(
+            @Value("${resend.api-key}") String apiKey,
+            @Value("${resend.from-email}") String from) {
+        this.resend = new Resend(apiKey);
+        this.from = from;
+    }
 
-    public EmailService(JavaMailSender mailSender) {
-        this.mailSender = mailSender;
+    EmailService(Resend resend, String from) {
+        this.resend = resend;
+        this.from = from;
     }
 
     public void sendOtpEmail(String to, String otp) {
-        SimpleMailMessage message = new SimpleMailMessage();
-        message.setFrom(from);
-        message.setTo(to);
-        message.setSubject("Your ArchBlog OTP Code");
-        message.setText("Your OTP for resetting your ArchBlog password is: " + otp + "\n\nThis OTP is valid for one use only.");
+        CreateEmailOptions email = CreateEmailOptions.builder()
+                .from(from)
+                .to(to)
+                .subject("Your ArchBlog OTP Code")
+                .text(
+                        "Your OTP for resetting your ArchBlog password is: "
+                                + otp
+                                + "\n\nThis OTP is valid for one use only."
+                )
+                .build();
 
         try {
-            mailSender.send(message);
+            resend.emails().send(email);
         } catch (Exception exception) {
             throw new EmailSendingException("Failed to send OTP email");
         }
