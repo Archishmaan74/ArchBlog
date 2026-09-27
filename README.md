@@ -2,7 +2,7 @@
 
 **Live Demo:** [https://archblog-frontend.onrender.com](https://archblog-frontend.onrender.com)
 
-![ArchBlog_1](https://github.com/user-attachments/assets/af791eba-51c0-4d4d-8f8a-3ac0b4a3ae64)
+<img width="1918" height="960" alt="ArchBlog_rec (1)" src="https://github.com/user-attachments/assets/7524d36e-625c-4782-9d69-8f9fb3461e50" />
 
 ArchBlog is a full-stack blogging platform where users can write, edit, and share blog posts. It is built using React for the frontend and Spring Boot for the backend. The data is stored in a PostgreSQL database hosted on the cloud.
 
@@ -18,6 +18,8 @@ This project includes user login with JWT, blog management features, and passwor
 - Edit user profile information
 - Forgot password and reset password via email OTP
 - Responsive design using Material-UI
+- Light and dark mode toggle using React Context API
+- Theme preference persisted using localStorage
 - Smooth connection between frontend and backend using REST APIs
 
 ---
@@ -28,6 +30,7 @@ This project includes user login with JWT, blog management features, and passwor
 - React (Vite)
 - Redux Toolkit
 - RTK Query
+- React Context API
 - Material-UI
 - React Router
 
@@ -74,6 +77,10 @@ Spring Boot Backend
 ```
 
 The frontend is organized into reusable pages, components, API services, shared types, utilities, test setup, and styling modules.
+
+### Theme Management
+
+ArchBlog uses the **React Context API** for application theme management. A custom `ThemeContext` provides the current theme and a `toggleTheme` function to switch between light and dark mode. The selected theme is integrated with Material-UI's theme system, and the user's preference is stored in `localStorage` so the selected theme is preserved across page reloads and future visits.
 
 ---
 
@@ -396,6 +403,7 @@ ArchBlog/
 │   ├── src/
 │   │   ├── app/
 │   │   ├── components/
+│   │   ├── context/
 │   │   ├── pages/
 │   │   ├── types/
 │   │   ├── utils/
@@ -448,6 +456,9 @@ The project has been upgraded with:
 - Production frontend build verification
 - Render SPA routing configuration
 - Improved responsive UI
+- Light and dark mode toggle using React Context API
+- Persistent theme preference using localStorage
+- Improved theme-aware styling across the application
 - Improved frontend project structure
 - More than 90% frontend test coverage across all major metrics
 - Test coverage excluded from Git tracking
