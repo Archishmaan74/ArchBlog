@@ -26,6 +26,10 @@ export const getApiErrorMessage = (
         return "The requested resource was not found.";
       }
 
+      if (error.status === 409) {
+        return "This email already exists.";
+      }
+
       if (error.status >= 500) {
         return "Something went wrong on the server. Please try again.";
       }
