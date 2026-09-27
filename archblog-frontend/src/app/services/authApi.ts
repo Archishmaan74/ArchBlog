@@ -77,7 +77,6 @@ export const authApi = createApi({
         url: "/auth/forgot-password",
         method: "POST",
         body: emailData,
-        timeout: 70000,
       }),
       transformResponse: (response: ApiResponse<string>) => response.data,
     }),
